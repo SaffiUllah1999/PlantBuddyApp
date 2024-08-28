@@ -6,7 +6,7 @@ export default function Login() {
     const navigation= useNavigation()
   return (
     <View>
-      <Text>Login</Text>
+      <Text>Login </Text>
       <Button title='Hello' onPress={()=> navigation?.navigate("Menu")}></Button>
     </View>
   )
