@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   AddIcon,
@@ -18,9 +18,32 @@ import {
   Pressable,
 } from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed";
+import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
   const navigation = useNavigation();
+  const [ dataset,setDataset]=useState({ tutorial:""})
+
+  const retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('Tutorial');
+      if (value !== null) {
+        // We have data!!
+        console.log(value);
+        setDataset(c=>({...c, tutorial: JSON.parse(value) }))
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      retrieveData()
+    }, [])
+  );
+  
   return (
     <View>
       <View style={{ alignItems: "center", marginHorizontal: "4%" }}>
@@ -94,7 +117,7 @@ export default function Login() {
             action="primary"
             isDisabled={false}
             isFocusVisible={false}
-            onPress={()=> navigation.navigate("Tutorial")}
+            onPress={()=> dataset?.tutorial?.toString()==="true" ? navigation.navigate("Home"): navigation.navigate("Tutorial")}
           >
             <ButtonText>Sign In </ButtonText>
           </Button>
@@ -108,7 +131,7 @@ export default function Login() {
             }}
           >
             <Text>Don't have a account ? </Text>
-            <Pressable onPress={() => navigation.navigate("Register")}>
+            <Pressable onPress={() =>  navigation.navigate("Register")}>
               <Text bold>Create One</Text>
             </Pressable>
           </View>
