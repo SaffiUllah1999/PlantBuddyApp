@@ -27,8 +27,8 @@ const Drawer = createDrawerNavigator();
 
 export default function Menu() {
   return (
-    <Drawer.Navigator initialRouteName="BottomNav"  screenOptions={{ headerShown: true }}>
-      <Drawer.Screen name="Home" component={BottomNav} />
+    <Drawer.Navigator initialRouteName="Home"  screenOptions={{ headerShown: true }}>
+      <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Notifications" component={NotificationsScreen} />
     </Drawer.Navigator>
   );

@@ -15,11 +15,10 @@ import {
   Image,
   Input,
   InputField,
-  Pressable,
 } from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed";
 
-export default function Login() {
+export default function Register() {
   const navigation = useNavigation();
   return (
     <View>
@@ -32,10 +31,10 @@ export default function Login() {
         />
 
         <Text size={"xl"} style={{ color: "#004643" }}>
-          Sign in to your account
+          Create new account
         </Text>
         <View style={{ alignItems: "flex-start", marginTop: 10, width: "96%" }}>
-          <Text style={{ marginVertical: "4%" }}>Email Address</Text>
+          <Text style={{ marginVertical: "4%" }}>Enter Email Address</Text>
           <Input
             borderRadius={10}
             minHeight={45}
@@ -62,12 +61,22 @@ export default function Login() {
             <InputField placeholder="Enter your password" />
           </Input>
 
-          <Text
-            style={{ marginVertical: "4%", width: "100%" }}
-            textAlign="right"
+          
+          <Text style={{ marginVertical: "4%" }}>Confirm Password</Text>
+
+          <Input
+            borderRadius={10}
+            variant="outline"
+            size="md"
+            minHeight={45}
+            isDisabled={false}
+            isInvalid={false}
+            isReadOnly={false}
           >
-            Forgot Password ?
-          </Text>
+            <InputField placeholder="Enter your password" />
+          </Input>
+
+
 
           <Checkbox
             size="md"
@@ -94,24 +103,9 @@ export default function Login() {
             action="primary"
             isDisabled={false}
             isFocusVisible={false}
-            onPress={()=> navigation.navigate("Tutorial")}
           >
-            <ButtonText>Sign In </ButtonText>
+            <ButtonText>Sign Up</ButtonText>
           </Button>
-
-          <View
-            style={{
-              flexDirection: "row",
-              width: "100%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text>Don't have a account ? </Text>
-            <Pressable onPress={() => navigation.navigate("Register")}>
-              <Text bold>Create One</Text>
-            </Pressable>
-          </View>
         </View>
       </View>
     </View>
