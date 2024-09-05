@@ -6,6 +6,7 @@ import Register from "../screens/Register";
 import BottomNav from "./BottomNav";
 import Tutorial from "../screens/Tutorial";
 import Home from "../screens/Home";
+import Details from "../screens/Details";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ export default function Screens() {
         <Stack.Screen name="Home" component={BottomNav} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="HomeScreen" component={Home} />
+        <Stack.Screen name="Details" component={Details} />
       </Stack.Navigator>
     </NavigationContainer>
   );

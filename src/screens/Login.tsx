@@ -81,7 +81,7 @@ export default function Login() {
             password: "",
             checked: false,
           }}
-          validationSchema={validationSchema}
+          // validationSchema={validationSchema}
           onSubmit={handleFormSubmit}
         >
           {({

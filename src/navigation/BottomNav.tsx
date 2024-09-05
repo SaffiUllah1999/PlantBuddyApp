@@ -26,7 +26,9 @@ const Tab = createBottomTabNavigator();
 
 export default function BottomNav() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator screenOptions={{ headerShown: false, tabBarStyle: {
+      backgroundColor: '#FCFCFD', // Background color of the tab bar
+    }, }} >
       <Tab.Screen name="Home" component={Menu} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
       <Tab.Screen
