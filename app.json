@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b8a16ff1-c3b7-4642-8bb2-9a1fc76bd998"
+      }
+    },
+    "owner": "saffiullah"
   }
 }
