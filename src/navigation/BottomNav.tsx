@@ -3,8 +3,10 @@ import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Menu from "./Menu";
-import { Camera } from 'lucide-react-native';
+import { BookOpen, Camera, Globe, House, UserRound } from "lucide-react-native";
 import { Icon } from "@gluestack-ui/themed";
+import Profile from "../screens/Profile";
+import Articles from "../screens/Articles";
 
 function HomeScreen() {
   return (
@@ -26,17 +28,71 @@ const Tab = createBottomTabNavigator();
 
 export default function BottomNav() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false, tabBarStyle: {
-      backgroundColor: '#FCFCFD', // Background color of the tab bar
-    }, }} >
-      <Tab.Screen name="Home" component={Menu} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: "#FCFCFD", // Background color of the tab bar
+        },
+      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={Menu}
+        options={{
+          tabBarLabel: "Home",
+          headerShown: false,
+          tabBarLabelStyle: {
+            color: "#000"
+          },
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+              }}
+            >
+              <Icon
+                as={House}
+                size="lg"
+                fill={focused ? "#0ACF83" :"#fff"}
+                // color={focused ? colors.primary : "white"}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Article"
+        component={Articles}
+        options={{
+          tabBarLabel: "Article",
+          headerShown: false,
+          tabBarLabelStyle: {
+            color: "#000"
+          },
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+              }}
+            >
+              <Icon
+                as={BookOpen}
+                size="lg"
+                fill={focused ? "#0ACF83" :"#fff"}
+                // color={focused ? colors.primary : "white"}
+              />
+            </View>
+          ),
+        }}
+      />
       <Tab.Screen
         name="Settings_"
         component={SettingsScreen}
         options={{
           tabBarLabel: "",
           headerShown: false,
+      
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -44,8 +100,8 @@ export default function BottomNav() {
                 borderColor: "white",
                 alignItems: "center",
                 borderRadius: 100,
-                backgroundColor: "white" ,
-                marginBottom: 20 ,
+                backgroundColor: "white",
+                marginBottom: 20,
                 marginTop: focused ? 0 : 12,
               }}
             >
@@ -73,8 +129,56 @@ export default function BottomNav() {
           ),
         }}
       />
-      <Tab.Screen name="Settings1" component={SettingsScreen} />
-      <Tab.Screen name="Settings2" component={SettingsScreen} />
+      <Tab.Screen
+        name="Browse"
+        component={Articles}
+        options={{
+          tabBarLabel: "Browse",
+          headerShown: false,
+          tabBarLabelStyle: {
+            color: "#000"
+          },
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+              }}
+            >
+              <Icon
+                as={Globe}
+                size="lg"
+                fill={focused ? "#0ACF83" :"#fff"}
+                // color={focused ? colors.primary : "white"}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: "Profile",
+          headerShown: false,
+          tabBarLabelStyle: {
+            color: "#000"
+          },
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={{
+                alignItems: "center",
+              }}
+            >
+              <Icon
+                as={UserRound}
+                size="lg"
+                fill={focused ? "#0ACF83" :"#fff"}
+                // color={focused ? colors.primary : "white"}
+              />
+            </View>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }

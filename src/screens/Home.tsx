@@ -12,10 +12,11 @@ import {
 } from "@gluestack-ui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { MapPin, Heart, Plus } from "lucide-react-native";
+import { MapPin, Heart, Plus, ShoppingCart } from "lucide-react-native";
 import { Input } from "@gluestack-ui/themed";
 import { InputField } from "@gluestack-ui/themed";
 import { ScrollView } from "react-native";
+import { Image } from "@gluestack-ui/themed";
 
 export default function Home() {
   const navigation = useNavigation();
@@ -74,7 +75,7 @@ export default function Home() {
               justifyContent: "space-evenly",
             }}
           >
-            <Icon as={CalendarDaysIcon} size="xl" />
+            <Icon as={ShoppingCart} size="xl" />
             <Pressable onPress={() => navigation.openDrawer()}>
               <Icon as={MenuIcon} size="xl" />
             </Pressable>
@@ -170,14 +171,25 @@ export default function Home() {
               <Box bg="#F0F4EF" p="$5"  margin={5} borderRadius={13}>
                 <View style={{ flexDirection: "row" }}>
                   <View style={{ width: "80%" }}>
-                    <Text color="white">This is the Box</Text>
+                   
                   </View>
                   <View style={{ width: "20%" }}>
                     <Icon fill={"#000"} as={Heart} size="xl" />
                   </View>
                 </View>
+                <Image
+                style={{
+                  width: "100%",
+                  height: undefined,
+                  aspectRatio: 1,
+                  resizeMode: "contain",
+                }}
+                source={require("../assets/images/image.png")}
+                alt={"---"}
+              />
                 <View style={{ flexDirection: "row" }}>
                   <View style={{ width: "80%" }}>
+                  <Text color="#000" bold>Alo</Text>
                     <Text>Name</Text>
                     <Text>Rs 249</Text>
                   </View>
