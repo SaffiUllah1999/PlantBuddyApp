@@ -1,5 +1,5 @@
 import { View, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect,useState } from "react";
 import {
   Avatar,
   AvatarFallbackText,
@@ -17,9 +17,32 @@ import { Input } from "@gluestack-ui/themed";
 import { InputField } from "@gluestack-ui/themed";
 import { ScrollView } from "react-native";
 import { Image } from "@gluestack-ui/themed";
+import CommonDataService from "../services/common_data";
+import { SERVICE_ROUTE } from "../services/endpoints";
 
 export default function Home() {
+  const commonDataService = new CommonDataService();
   const navigation = useNavigation();
+
+  const [dataset, setDataset] = useState({ products: [] });
+
+  const Get_Products = () => {
+    // console.log("entered");
+    // let dataset = {
+    //   email: c?.email,
+    //   password: c?.password,
+    // };
+
+    commonDataService
+      .fetchData(SERVICE_ROUTE.GET_PRODUCTS)
+      .then((res) => {
+        console.log("Resend :" + JSON.stringify(res));
+        setDataset((c) => ({ ...c, products: res?.data }));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const DATA = [
     {
@@ -34,7 +57,7 @@ export default function Home() {
       id: "58694a0f-3da1-471f-bd96-145571e29d72",
       title: "Third Item",
     },
-      {
+    {
       id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
       title: "Second Item",
     },
@@ -43,6 +66,10 @@ export default function Home() {
       title: "Third Item",
     },
   ];
+
+  useEffect(() => {
+    Get_Products();
+  }, []);
 
   return (
     <View style={{ height: "100%", backgroundColor: "#fff" }}>
@@ -161,35 +188,35 @@ export default function Home() {
       </View>
       <View style={{ height: "60%" }}>
         <FlatList
-          data={DATA}
+          data={dataset?.products}
           numColumns={2}
           // refreshControl={
           //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           // }
           renderItem={({ item }) => (
-            <Pressable onPress={()=> navigation.navigate("Details")} flex={1}>
-              <Box bg="#F0F4EF" p="$5"  margin={5} borderRadius={13}>
+            <Pressable onPress={() => navigation.navigate("Details")} flex={1}>
+              <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ width: "80%" }}>
-                   
-                  </View>
+                  <View style={{ width: "80%" }}></View>
                   <View style={{ width: "20%" }}>
                     <Icon fill={"#000"} as={Heart} size="xl" />
                   </View>
                 </View>
                 <Image
-                style={{
-                  width: "100%",
-                  height: undefined,
-                  aspectRatio: 1,
-                  resizeMode: "contain",
-                }}
-                source={require("../assets/images/image.png")}
-                alt={"---"}
-              />
+                  style={{
+                    width: "100%",
+                    height: undefined,
+                    aspectRatio: 1,
+                    resizeMode: "contain",
+                  }}
+                  source={{ uri: `data:image/png;base64,${item?.image}`}}
+                  alt={"---"}
+                />
                 <View style={{ flexDirection: "row" }}>
                   <View style={{ width: "80%" }}>
-                  <Text color="#000" bold>Alo</Text>
+                    <Text color="#000" bold>
+                      Alo
+                    </Text>
                     <Text>Name</Text>
                     <Text>Rs 249</Text>
                   </View>

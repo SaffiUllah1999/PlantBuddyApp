@@ -1,1 +1,4 @@
-export const SERVICE_ROUTE = { REGISTER: "/register" };
+export const SERVICE_ROUTE = {
+  REGISTER: "/register",
+  GET_PRODUCTS: "/getProducts",
+};

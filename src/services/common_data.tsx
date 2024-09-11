@@ -25,12 +25,7 @@ axiosInstance.interceptors.request.use(
   },
 );
 
-
-
-
-export const REACT_APP_API_URL = 'http://192.168.1.122:3000'; // FDP Local
-
-
+export const REACT_APP_API_URL = 'http://192.168.5.57:3000'; // FDP Local
 export default class CommonDataService {
   executeApiCall(path, data) {
     console.log(`${REACT_APP_API_URL}${path}`+JSON.stringify(data))
@@ -51,11 +46,4 @@ export default class CommonDataService {
 
 
 
-//   uploadDocument(path, document) {
-//     var data = new FormData();
-//     data.append('file', document);
-//     return axiosInstance
-//       .post(`${REACT_APP_API_URL}${path}`, data)
-//       .then((res) => res);
-//   }
 }
