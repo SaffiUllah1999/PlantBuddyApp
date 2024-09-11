@@ -20,8 +20,8 @@ const url =
 async function main() {
   const client = new MongoClient(url);
 
-  try {
-    await client.connect();
+  try { 
+    await client.connect(); 
     console.log("Connection Success");
     const dbo = client.db("PlantBuddy");
 
