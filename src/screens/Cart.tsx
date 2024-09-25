@@ -42,14 +42,15 @@ export default function Cart() {
   const { userData, setUserData } = useData();
   const [dataset, setDataset] = useState({ products: [], totalPrice: "" });
 
-  const Get_Products = () =>(c) => {
+  const Get_Products = () =>{
     console.log("entered");
     let dataset = {
       email: userData?.email,
     };
     commonDataService
-      .fetchData_2(SERVICE_ROUTE.GET_CART_DATA, data)
+      .fetchData_3(SERVICE_ROUTE.GET_CART_DATA, dataset)
       .then((res) => {
+        console.log(res);
         setDataset((c) => ({ ...c, products: res?.data }));
         setDataset((c) => ({
           ...c,
@@ -65,19 +66,18 @@ export default function Cart() {
     console.log(c);
     let dataset = {
       _id: c,
-      email: userData?.email
+      email: userData?.email,
     };
 
     commonDataService
       .executeApiCall(SERVICE_ROUTE.REMOVE_DATA_CART, dataset)
       .then((res) => {
         console.log("Resend :" + JSON.stringify(res));
-        Get_Products()
+        Get_Products();
         // setShowModal(true)
       })
       .catch(function (error) {
         if (error) {
-
           Alert.alert(
             "Error", // Title of the alert
             error?.response?.data?.message, // Message of the alert
@@ -93,11 +93,15 @@ export default function Cart() {
     }, [])
   );
 
+  useEffect(() => {
+    Get_Products();
+  }, []);
+
   const navigation = useNavigation();
 
   const calculateTotalPrice = (c) => {
     return c.reduce(
-      (total, item) => total + (parseFloat(item?.data?.price) || 0),
+      (total, item) => total + (parseFloat(item?.data?.price)* item?.quantity || 0),
       0
     );
   };
@@ -127,9 +131,11 @@ export default function Cart() {
         <View style={{ width: "35%" }}></View>
       </View>
       <View style={{ height: "5%" }}>
-        <Text bold size={"2xl"} paddingHorizontal={10} color={"#0D986A"}>
-          Your Bag
-        </Text>
+        <Pressable onPress={() => Get_Products()}>
+          <Text bold size={"2xl"} paddingHorizontal={10} color={"#0D986A"}>
+            Your Bag
+          </Text>
+        </Pressable>
       </View>
       <View style={{ height: "50%", paddingVertical: 10 }}>
         <FlatList
@@ -157,11 +163,15 @@ export default function Cart() {
                       <Text color="#000" bold>
                         {item?.data?.name}
                       </Text>
-                      <Text>Rs{item?.data?.price}</Text>
+                      <Text color="#000" bold>
+                        Quantity : {item?.quantity}
+                      </Text>
+                      
+                      <Text>Rs {parseFloat(item?.data?.price) * item?.quantity}</Text>
                     </View>
                     <View style={{ width: "0%" }}>
-                      <Pressable onPress={()=>Remove_Cart(item?.data?._id)}>
-                      <Icon color={"red"} as={Trash2} size="xl" />
+                      <Pressable onPress={() => Remove_Cart(item?.data?._id)}>
+                        <Icon color={"red"} as={Trash2} size="xl" />
                       </Pressable>
                     </View>
                   </View>

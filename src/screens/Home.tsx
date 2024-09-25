@@ -9,6 +9,9 @@ import {
   MenuIcon,
   Pressable,
   Box,
+  CloseIcon,
+  Button,
+  ButtonText,
 } from "@gluestack-ui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -22,14 +25,30 @@ import { SERVICE_ROUTE } from "../services/endpoints";
 import { useData } from "../hooks/useData";
 import { useFocusEffect } from "@react-navigation/native";
 import Loading from "../components/Loading";
+import { Modal } from "@gluestack-ui/themed";
+import { ModalBackdrop } from "@gluestack-ui/themed";
+import { ModalContent } from "@gluestack-ui/themed";
+import { ModalHeader } from "@gluestack-ui/themed";
+import { Heading } from "@gluestack-ui/themed";
+import { ModalCloseButton } from "@gluestack-ui/themed";
+import { ModalBody } from "@gluestack-ui/themed";
+import { ModalFooter } from "@gluestack-ui/themed";
 
 export default function Home() {
   const { userData, setUserData } = useData();
   const commonDataService = new CommonDataService();
   const navigation = useNavigation();
   const [loading, setloading] = useState(false);
-
-  const [dataset, setDataset] = useState({ products: [], favourites: [] });
+  const [dataset, setDataset] = useState({
+    products: [],
+    favourites: [],
+    modal: false,
+    item_selected: {},
+    quantity: 0,
+  });
+  const [showModal, setShowModal] = useState(false);
+  console.log(showModal);
+  const ref = React.useRef(null);
 
   const Get_Products = () => {
     // console.log("entered");
@@ -87,6 +106,7 @@ export default function Home() {
       .executeApiCall(SERVICE_ROUTE.ADD_FAV, data_set)
       .then((res) => {
         // setShowModal(true)
+        Get_Fav();
       })
       .catch(function (error) {
         if (error) {
@@ -100,38 +120,13 @@ export default function Home() {
       });
   };
 
-  const DATA = [
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      title: "First Item",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      title: "Second Item",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      title: "Third Item",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      title: "Second Item",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      title: "Third Item",
-    },
-  ];
-
   const Get_Fav = () => {
-    console.log("entered");
-    // let dataset = {
-    //   email: c?.email,
-    //   password: c?.password,
-    // };
+    let dataset = {
+      email: userData?.email,
+    };
 
     commonDataService
-      .fetchData(SERVICE_ROUTE.GET_FAV)
+      .fetchData_3(SERVICE_ROUTE.GET_FAV, dataset)
       .then((res) => {
         setDataset((c) => ({ ...c, favourites: res?.data }));
         Get_Products();
@@ -152,22 +147,68 @@ export default function Home() {
       .executeApiCall(SERVICE_ROUTE.DEL_FAV, dataset)
       .then((res) => {
         setDataset((c) => ({ ...c, favourites: res?.data }));
+        Get_Fav();
       })
       .catch(function (error) {
         console.log(error);
       });
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      Get_Fav();
-    }, [])
-  );
+  useEffect(() => {
+    Get_Fav();
+  }, []);
 
   return loading ? (
     <Loading />
   ) : (
     <View style={{ height: "100%", backgroundColor: "#fff" }}>
+      <Modal
+        isOpen={dataset?.modal}
+        onClose={() => {
+          setDataset((c) => ({ ...c, modal: false }));
+        }}
+        finalFocusRef={ref}
+      >
+        <ModalBackdrop />
+        <ModalContent>
+          <ModalHeader>
+            <Heading size="lg">Add to cart</Heading>
+            <ModalCloseButton>
+              <Icon as={CloseIcon} />
+            </ModalCloseButton>
+          </ModalHeader>
+          <ModalBody>
+            <Text>Quantity</Text>
+            <Input>
+              <InputField placeholder="Enter Text here" onChangeText={(x)=> setDataset(c=>({...c, quantity: parseFloat(x)}))}/>
+            </Input>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="outline"
+              size="sm"
+              action="secondary"
+              mr="$3"
+              onPress={() => {
+                setShowModal(false);
+              }}
+            >
+              <ButtonText>Cancel</ButtonText>
+            </Button>
+            <Button
+              size="sm"
+              action="positive"
+              borderWidth="$0"
+              onPress={() => {
+                Add_To_Cart(dataset?.item_selected, dataset?.quantity);
+                setDataset((c) => ({ ...c, modal: false }));
+              }}
+            >
+              <ButtonText>Submit</ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <View
         style={{
           height: "15%",
@@ -284,7 +325,10 @@ export default function Home() {
           //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           // }
           renderItem={({ item }) => (
-            <Pressable onPress={() => navigation.navigate("Details",{data: item})} flex={1}>
+            <Pressable
+              onPress={() => navigation.navigate("Details", { data: item })}
+              flex={1}
+            >
               <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
                 <View style={{ flexDirection: "row" }}>
                   <View style={{ width: "80%" }}></View>
@@ -345,7 +389,15 @@ export default function Home() {
                     <Text>Rs{item?.price}</Text>
                   </View>
                   <View style={{ width: "0%" }}>
-                    <Pressable onPress={() => Add_To_Cart(item, 1)}>
+                    <Pressable
+                      onPress={() =>
+                        setDataset((c) => ({
+                          ...c,
+                          modal: true,
+                          item_selected: item,
+                        }))
+                      }
+                    >
                       <Icon fill={"#000"} as={Plus} size="xl" />
                     </Pressable>
                   </View>
