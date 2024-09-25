@@ -50,7 +50,12 @@ export default class CommonDataService {
 
   fetchData_2(path, data) {
     return axiosInstance
-    .get(`${REACT_APP_API_URL}${path}`, data)
+    .get(`${REACT_APP_API_URL}${path}`,data)
+    .then((res) => res);
+  }
+  fetchData_3(path, data) {
+    return axiosInstance
+    .get(`${REACT_APP_API_URL}${path}`,{ params: data })
     .then((res) => res);
   }
 }

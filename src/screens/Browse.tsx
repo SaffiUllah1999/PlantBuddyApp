@@ -1,5 +1,5 @@
 import { StyleSheet, View, useWindowDimensions } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "@gluestack-ui/themed";
 import { Icon, CalendarDaysIcon } from "@gluestack-ui/themed";
 import {
@@ -29,18 +29,47 @@ import { SERVICE_ROUTE } from "../services/endpoints";
 import { useData } from "../hooks/useData";
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
+import Loading from "../components/Loading";
+import { FlatList } from "react-native";
+import { Avatar } from "@gluestack-ui/themed";
+import { AvatarFallbackText } from "@gluestack-ui/themed";
 
 export default function Browse({ route }) {
   const navigation = useNavigation();
   const layout = useWindowDimensions();
   const [current, setCurrent] = useState(1);
   const { userData, setUserData } = useData();
-  const [loading, setloading] = useState(false);
+  const [loading, setloading] = useState(true);
+
+  const [dataset, setDataset] = useState();
 
   const [image, setImage] = useState(null);
   const [base64String, setBase64String] = useState("");
 
   const commonDataService = new CommonDataService();
+
+  useEffect(() => {
+    Get_Feed();
+  }, []);
+
+  const Get_Feed = () => {
+   
+    let dataset = {
+      email: userData?.email,
+    };
+
+    console.log(dataset);
+    commonDataService
+      .fetchData_3(SERVICE_ROUTE.GET_FEED,dataset)
+      .then((res) => {
+        setDataset(res?.data);
+        setloading(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+        setloading(false);
+      });
+  };
 
   const handle_Upload = (c, image) => {
     console.log("entered");
@@ -55,7 +84,6 @@ export default function Browse({ route }) {
         console.log("Resend :" + JSON.stringify(res));
         setUserData((c) => ({ ...c, email: dataset?.email }));
         setloading(false);
-   
       })
       .catch(function (error) {
         if (error) {
@@ -103,7 +131,9 @@ export default function Browse({ route }) {
     }
   };
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4EF" }}>
       <View style={{ flexDirection: "row", height: "10%" }}>
         <View style={{ width: "35%", justifyContent: "center" }}>
@@ -124,7 +154,39 @@ export default function Browse({ route }) {
           <Text bold>Feed </Text>
         </View>
       </View>
-      <View style={{ flexDirection: "row", height: "80%" }}></View>
+      <View style={{ flexDirection: "row", height: "80%" }}>
+        <FlatList
+          data={dataset}
+          style={{ paddingHorizontal: 10 }}
+          // refreshControl={
+          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          // }
+          renderItem={({ item }) => (
+            <Pressable flex={1}>
+              <View style={{ width: "100%", margin:5, alignItems: "flex-start" }}>
+                <Avatar bgColor="$amber600" size="sm" borderRadius="$full">
+                  <AvatarFallbackText>Avatar</AvatarFallbackText>
+                </Avatar>
+              </View>
+              <Box bg="#fff" p="$5" margin={5} borderRadius={13}>
+                <View style={{ flexDirection: "row" }}></View>
+                <Image
+                  style={{
+                    marginVertical: 10,
+                    width: "100%",
+                    height: undefined,
+                    aspectRatio: 2,
+                    resizeMode: "contain",
+                  }}
+                  source={{ uri: item?.image }}
+                  alt={"---"}
+                />
+              </Box>
+            </Pressable>
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
       <View style={{ flexDirection: "row", height: "10%" }}>
         <View
           style={{

@@ -10,5 +10,6 @@ export const SERVICE_ROUTE = {
   DEL_FAV:"/removefromfavourites",
   GET_ARTICLES:"/getarticles",
   ADD_SCORE:"/addscore",
-  UPLOAD_PICTURES:"/uploadpersonalpictures"
+  UPLOAD_PICTURES:"/uploadpersonalpictures",
+  GET_FEED:"/getpersonalpictures"
 };
