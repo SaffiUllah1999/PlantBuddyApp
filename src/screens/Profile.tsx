@@ -148,9 +148,9 @@ export default function Profile() {
                 <Text bold color={"white"}>
                   Ali
                 </Text>
-                <Button bg={"white"}>
+                {/* <Button bg={"white"}>
                   <ButtonText color={"black"}>Edit Profile</ButtonText>
-                </Button>
+                </Button> */}
               </View>
             </View>
 
@@ -159,7 +159,7 @@ export default function Profile() {
                 flexDirection: "row",
                 height: "10%",
                 justifyContent: "space-evenly",
-                borderWidth:1,
+                borderWidth: 1,
                 backgroundColor: "#000",
               }}
             >

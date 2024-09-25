@@ -37,7 +37,7 @@ import AnimatedLottieView from "lottie-react-native";
 export default function Register() {
   const navigation = useNavigation();
   const commonDataService = new CommonDataService();
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   const validationSchema = () => {
     {
@@ -57,15 +57,24 @@ export default function Register() {
     let dataset = {
       email: c?.email,
       password: c?.password,
+      Score: 0,
     };
 
     commonDataService
       .executeApiCall(SERVICE_ROUTE.REGISTER, dataset)
       .then((res) => {
         console.log("Resend :" + JSON.stringify(res));
+        setShowModal(true);
       })
       .catch(function (error) {
-        console.log(error);
+        if (error) {
+          console.log(JSON.stringify(error.response?.data));
+          Alert.alert(
+            "Error", // Title of the alert
+            error?.response?.data?.message, // Message of the alert
+            [{ text: "OK" }] // Buttons array, with an OK button
+          );
+        }
       });
   };
 
@@ -113,30 +122,32 @@ export default function Register() {
                 <ModalBackdrop />
                 <ModalContent>
                   <ModalHeader>
-                  
-                    <ModalCloseButton onPress={()=>navigation.navigate("login")}>
+                    <ModalCloseButton
+                      onPress={() => navigation.navigate("login")}
+                    >
                       <Icon as={CloseIcon} size="xl" />
                     </ModalCloseButton>
-                  
                   </ModalHeader>
                   <ModalBody>
-                    <View style={{justifyContent:"center",alignItems:"center"}}>
-                    <AnimatedLottieView
-                      speed={1}
-                      duration={5000}
-                      autoPlay
-                      loop={true}
-                      // ref={animation}
-                      style={{ width: 250, height: 250 }}
-                      resizeMode="cover"
-                      source={require("../assets/animation/Success.json")}
-                    />
-                    <Text bold alignSelf="center">Account Created Successfully</Text>
+                    <View
+                      style={{ justifyContent: "center", alignItems: "center" }}
+                    >
+                      <AnimatedLottieView
+                        speed={1}
+                        duration={5000}
+                        autoPlay
+                        loop={true}
+                        // ref={animation}
+                        style={{ width: 250, height: 250 }}
+                        resizeMode="cover"
+                        source={require("../assets/animation/Success.json")}
+                      />
+                      <Text bold alignSelf="center">
+                        Account Created Successfully
+                      </Text>
                     </View>
                   </ModalBody>
-                  <ModalFooter>
-                 
-                  </ModalFooter>
+                  <ModalFooter></ModalFooter>
                 </ModalContent>
               </Modal>
               <Text style={{ marginVertical: "4%" }}>Enter Email Address</Text>
@@ -172,7 +183,7 @@ export default function Register() {
               >
                 <InputField
                   placeholder="Enter your password"
-                   type="password"
+                  type="password"
                   onChangeText={handleChange("password")}
                 />
               </Input>
@@ -194,7 +205,7 @@ export default function Register() {
               >
                 <InputField
                   placeholder="Enter your password"
-                   type="password"
+                  type="password"
                   onChangeText={handleChange("confirm_Password")}
                 />
               </Input>

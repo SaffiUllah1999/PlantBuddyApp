@@ -1,5 +1,5 @@
 import { View, FlatList, useWindowDimensions } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Avatar,
   AvatarFallbackText,
@@ -22,6 +22,7 @@ import {
   Grid2X2,
   UserSquare,
   ChevronLeftIcon,
+  ChevronRightIcon,
 } from "lucide-react-native";
 import { Input } from "@gluestack-ui/themed";
 import { InputField } from "@gluestack-ui/themed";
@@ -30,13 +31,42 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "@gluestack-ui/themed";
 import { ButtonText } from "@gluestack-ui/themed";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import CommonDataService from "../services/common_data";
+import { SERVICE_ROUTE } from "../services/endpoints";
+import Loading from "../components/Loading";
 
 export default function Articles() {
+  const commonDataService = new CommonDataService();
   const navigation = useNavigation();
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4EF" }}>
+  const [dataset, setDataset] = useState({ products: [], articles: [], loading:false });
+
+  const Get_Fav = () => {
+    // console.log("entered");
+    // let dataset = {
+    //   email: c?.email,
+    //   password: c?.password,
+    // };
+
+    commonDataService
+      .fetchData(SERVICE_ROUTE.GET_ARTICLES)
+      .then((res) => {
+        console.log("res")
+        setDataset((c) => ({ ...c, articles: res?.data, loading:false }));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    setDataset(c=>({...c, loading:true}))
+    Get_Fav();
+  }, []);
+
+  return  dataset.loading ? <Loading/> : (
+   <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4EF" }}>
       <View style={{ flexDirection: "row", height: "10%" }}>
-        <View style={{ width: "40%" }}>
+        <View style={{ width: "35%", justifyContent: "center" }}>
           <Pressable
             onPress={() => navigation.goBack()}
             style={{ paddingHorizontal: 10 }}
@@ -44,14 +74,22 @@ export default function Articles() {
             <Icon as={ChevronLeftIcon} size="xl" />
           </Pressable>
         </View>
-        <View style={{ width: "30%" }}>
+        <View
+          style={{
+            width: "30%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Text bold>Articles</Text>
         </View>
-        <View style={{ width: "30%" }}></View>
+        <View style={{ width: "35%" }}></View>
       </View>
+
       <Text bold style={{ marginHorizontal: "3%" }} size="xl" color="#000">
         Category
       </Text>
+
       <View style={{ height: "5%", marginVertical: 20 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <Box
@@ -106,82 +144,49 @@ export default function Articles() {
         style={{
           height: "40%",
           marginVertical: 20,
-
           paddingHorizontal: 10,
         }}
       >
         <Text paddingVertical={20}>Trending</Text>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <Pressable style={{ height: "100%", width: 300 }}>
-            <Image
-              style={{
-                backgroundColor: "yellow",
-                width: "100%",
-                height: undefined,
-                aspectRatio: 2,
-                borderRadius: 15,
-                resizeMode: "contain",
-              }}
-              source={require("../assets/images/image.png")}
-              alt={"---"}
-            />
-            <Text bold size={"lg"}>
-              dasdadsadasd
-            </Text>
-            <Text>dasdadsadasd</Text>
-          </Pressable>
-          <Pressable
-            style={{ height: "100%", width: 300, marginHorizontal: 10 }}
-          >
-            <Image
-              style={{
-                backgroundColor: "red",
-                width: "100%",
-                borderRadius: 15,
-                height: undefined,
-                aspectRatio: 2,
-                resizeMode: "contain",
-              }}
-              source={require("../assets/images/image.png")}
-              alt={"---"}
-            />
-            <Text bold size={"lg"}>
-              dasdadsadasd
-            </Text>
-            <Text>dasdadsadasd</Text>
-          </Pressable>
-          <Pressable style={{ height: "100%", width: 300 }}>
-            <Image
-              style={{
-                backgroundColor: "yellow",
-                width: "100%",
-                borderRadius: 15,
-                height: undefined,
-                aspectRatio: 2,
-                resizeMode: "contain",
-              }}
-              source={require("../assets/images/image.png")}
-              alt={"---"}
-            />
-            <Text bold size={"lg"}>
-              dasdadsadasd
-            </Text>
-            <Text>dasdadsadasd</Text>
-          </Pressable>
-        </ScrollView>
+        <FlatList
+          data={dataset?.articles}
+          style={{ paddingHorizontal: 10 , }}
+          horizontal={true}
+          // refreshControl={
+          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          // }
+          renderItem={({ item }) => (
+            <>
+              <Pressable style={{ width: 300, paddingHorizontal: 10 }} onPress={()=> navigation.navigate("ArticleDetail",{
+                data: item
+              })}>
+                <Image
+                  style={{
+                    backgroundColor: "yellow",
+                    width: "100%",
+                    height: undefined,
+                    aspectRatio: 2,
+                    borderRadius: 15,
+                    resizeMode: "stretch",
+                  }}
+                  source={{ uri: `data:image/png;base64,${item?.image}` }}
+                  alt={"---"}
+                />
+                <View>
+                  <Text bold size={"lg"}>
+                    {item?.title}
+                  </Text>
+                  <View style={{ width: "100%" , alignItems:"flex-end"}}>
+                    <Icon as={ChevronRightIcon} size="xl" />
+                  </View>
+                </View>
+              </Pressable>
+            </>
+          )}
+        />
       </View>
-      <View style={{ height: "30%", marginVertical: 20 }}>
-        {/* <Image
-          style={{
-            width: "100%",
-            height: undefined,
-            aspectRatio: 1,
-            resizeMode: "contain",
-          }}
-          source={require("../assets/images/image.png")}
-          alt={"---"}
-        /> */}
-      </View>
+
+      <View style={{ height: "30%", marginVertical: 20 }}></View>
     </SafeAreaView>
   );
 }

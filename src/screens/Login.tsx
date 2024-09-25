@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -22,10 +22,17 @@ import { Text } from "@gluestack-ui/themed";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
+import CommonDataService from "../services/common_data";
+import { SERVICE_ROUTE } from "../services/endpoints";
+import { useData } from "../hooks/useData";
+import Loading from "../components/Loading";
 
 export default function Login() {
+  const { setUserData } = useData();
   const navigation = useNavigation();
   const [dataset, setDataset] = useState({ tutorial: "" });
+  const commonDataService = new CommonDataService();
+  const [loading,setloading]=useState(false)
 
   const retrieveData = async () => {
     try {
@@ -38,6 +45,36 @@ export default function Login() {
     } catch (error) {
       // Error retrieving data
     }
+  };
+
+  const handle_Login = (c) => {
+    console.log("entered");
+    let dataset = {
+      email: c?.email,
+      password: c?.password,
+    };
+
+    commonDataService
+      .executeApiCall(SERVICE_ROUTE.LOGIN, dataset)
+      .then((res) => {
+        console.log("Resend :" + JSON.stringify(res));
+        setUserData((c) => ({...c, email:dataset?.email }));
+        setloading(false)
+        res?.data?.toString() === "true"
+          ? navigation.navigate("Home")
+          : navigation.navigate("Tutorial");
+      })
+      .catch(function (error) {
+        if (error) {
+          setloading(false)
+          console.log(JSON.stringify(error.response?.data));
+          Alert.alert(
+            "Error", // Title of the alert
+            error.response?.data, // Message of the alert
+            [{ text: "OK" }] // Buttons array, with an OK button
+          );
+        }
+      });
   };
 
   useFocusEffect(
@@ -55,13 +92,13 @@ export default function Login() {
     }
   };
   const handleFormSubmit = (values) => {
-    dataset?.tutorial?.toString() === "true"
-      ? navigation.navigate("Home")
-      : navigation.navigate("Tutorial");
+    setloading(true)
+    handle_Login(values);
+
     // Register_Call(values);
   };
 
-  return (
+  return loading ? <Loading/> : (
     <View>
       <View style={{ alignItems: "center", marginHorizontal: "4%" }}>
         <Image
@@ -104,11 +141,9 @@ export default function Login() {
                 isDisabled={false}
                 isInvalid={false}
                 isReadOnly={false}
-                 
               >
                 <InputField
                   placeholder="Enter your email address"
-                 
                   onChangeText={handleChange("email")}
                 />
               </Input>
@@ -130,7 +165,7 @@ export default function Login() {
               >
                 <InputField
                   placeholder="Enter your password"
-                   type="password"
+                  type="password"
                   onChangeText={handleChange("password")}
                 />
               </Input>
@@ -155,10 +190,13 @@ export default function Login() {
                 onChange={(c) => setFieldValue("checked", c)}
               >
                 <CheckboxIndicator mr="$2">
-                  <CheckboxIcon as={CheckIcon}   color="$white"
+                  <CheckboxIcon
+                    as={CheckIcon}
+                    color="$white"
                     bgColor="$green800"
                     borderColor="$green800"
-                    $active-borderColor="$green800"/>
+                    $active-borderColor="$green800"
+                  />
                 </CheckboxIndicator>
                 <CheckboxLabel style={{ marginHorizontal: "5%" }}>
                   I’ve read and agreed to User Agreement and Privacy Policy
@@ -175,17 +213,20 @@ export default function Login() {
                 action="primary"
                 isDisabled={false}
                 isFocusVisible={false}
-                onPress={() =>   values.checked
-                  ? handleSubmit() :  Alert.alert(
-                    "Error",
-                    "Please accept terms & conditions !",
-                    [
-                      {
-                        text: "OK",
-                        onPress: () => console.log("OK Pressed"),
-                      },
-                    ]
-                  )}
+                onPress={() =>
+                  values.checked
+                    ? handleSubmit()
+                    : Alert.alert(
+                        "Error",
+                        "Please accept terms & conditions !",
+                        [
+                          {
+                            text: "OK",
+                            onPress: () => console.log("OK Pressed"),
+                          },
+                        ]
+                      )
+                }
               >
                 <ButtonText>Sign In </ButtonText>
               </Button>

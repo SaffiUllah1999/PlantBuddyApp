@@ -1,5 +1,5 @@
-import { View, FlatList } from "react-native";
-import React, { useEffect,useState } from "react";
+import { View, FlatList, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   AvatarFallbackText,
@@ -19,12 +19,17 @@ import { ScrollView } from "react-native";
 import { Image } from "@gluestack-ui/themed";
 import CommonDataService from "../services/common_data";
 import { SERVICE_ROUTE } from "../services/endpoints";
+import { useData } from "../hooks/useData";
+import { useFocusEffect } from "@react-navigation/native";
+import Loading from "../components/Loading";
 
 export default function Home() {
+  const { userData, setUserData } = useData();
   const commonDataService = new CommonDataService();
   const navigation = useNavigation();
+  const [loading, setloading] = useState(false);
 
-  const [dataset, setDataset] = useState({ products: [] });
+  const [dataset, setDataset] = useState({ products: [], favourites: [] });
 
   const Get_Products = () => {
     // console.log("entered");
@@ -36,11 +41,62 @@ export default function Home() {
     commonDataService
       .fetchData(SERVICE_ROUTE.GET_PRODUCTS)
       .then((res) => {
-        console.log("Resend :" + JSON.stringify(res));
         setDataset((c) => ({ ...c, products: res?.data }));
+        setloading(false);
       })
       .catch(function (error) {
         console.log(error);
+      });
+  };
+
+  const Add_To_Cart = (c, quantity) => {
+    console.log("entered");
+    let dataset = {
+      _id: c?._id,
+      email: userData?.email,
+      quantity: quantity,
+    };
+
+    commonDataService
+      .executeApiCall(SERVICE_ROUTE.ADD_TO_CART, dataset)
+      .then((res) => {
+        console.log("Resend :" + JSON.stringify(res));
+        // setShowModal(true)
+      })
+      .catch(function (error) {
+        if (error) {
+          Alert.alert(
+            "Error", // Title of the alert
+            error?.response?.data?.message, // Message of the alert
+            [{ text: "OK" }] // Buttons array, with an OK button
+          );
+        }
+      });
+  };
+
+  const Add_To_Fav = (c) => {
+    console.log("entered");
+    let data_set = {
+      _id: c,
+      email: userData?.email,
+    };
+
+    console.log(JSON.stringify(data_set));
+
+    commonDataService
+      .executeApiCall(SERVICE_ROUTE.ADD_FAV, data_set)
+      .then((res) => {
+        // setShowModal(true)
+      })
+      .catch(function (error) {
+        if (error) {
+          console.log(JSON.stringify(error.response?.data));
+          Alert.alert(
+            "Error", // Title of the alert
+            error?.response?.data?.message, // Message of the alert
+            [{ text: "OK" }] // Buttons array, with an OK button
+          );
+        }
       });
   };
 
@@ -67,11 +123,50 @@ export default function Home() {
     },
   ];
 
-  useEffect(() => {
-    Get_Products();
-  }, []);
+  const Get_Fav = () => {
+    console.log("entered");
+    // let dataset = {
+    //   email: c?.email,
+    //   password: c?.password,
+    // };
 
-  return (
+    commonDataService
+      .fetchData(SERVICE_ROUTE.GET_FAV)
+      .then((res) => {
+        setDataset((c) => ({ ...c, favourites: res?.data }));
+        Get_Products();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const Del_Fav = (c) => {
+    // console.log("entered");
+    let dataset = {
+      _id: c,
+      email: userData?.email,
+    };
+
+    commonDataService
+      .executeApiCall(SERVICE_ROUTE.DEL_FAV, dataset)
+      .then((res) => {
+        setDataset((c) => ({ ...c, favourites: res?.data }));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      Get_Fav();
+    }, [])
+  );
+
+  return loading ? (
+    <Loading />
+  ) : (
     <View style={{ height: "100%", backgroundColor: "#fff" }}>
       <View
         style={{
@@ -102,7 +197,9 @@ export default function Home() {
               justifyContent: "space-evenly",
             }}
           >
-            <Icon as={ShoppingCart} size="xl" />
+            <Pressable onPress={() => navigation.navigate("Cart")}>
+              <Icon as={ShoppingCart} size="xl" />
+            </Pressable>
             <Pressable onPress={() => navigation.openDrawer()}>
               <Icon as={MenuIcon} size="xl" />
             </Pressable>
@@ -172,17 +269,9 @@ export default function Home() {
             borderRadius={50}
             marginHorizontal={10}
           >
-            <Text color="#D0D5DD"> is the Box</Text>
-          </Box>
-          <Box
-            bg="#fff"
-            borderWidth={1}
-            borderColor={"#D0D5DD"}
-            justifyContent="center"
-            borderRadius={50}
-            marginHorizontal={10}
-          >
-            <Text color="#D0D5DD">This is the </Text>
+            <Text color="#D0D5DD" paddingHorizontal={20}>
+              Favourite
+            </Text>
           </Box>
         </ScrollView>
       </View>
@@ -190,38 +279,75 @@ export default function Home() {
         <FlatList
           data={dataset?.products}
           numColumns={2}
+          style={{ paddingHorizontal: 10 }}
           // refreshControl={
           //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           // }
           renderItem={({ item }) => (
-            <Pressable onPress={() => navigation.navigate("Details")} flex={1}>
+            <Pressable onPress={() => navigation.navigate("Details",{data: item})} flex={1}>
               <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
                 <View style={{ flexDirection: "row" }}>
                   <View style={{ width: "80%" }}></View>
                   <View style={{ width: "20%" }}>
-                    <Icon fill={"#000"} as={Heart} size="xl" />
+                    <Pressable
+                      onPress={() =>
+                        dataset?.favourites.length > 0
+                          ? dataset?.favourites?.find((c) =>
+                              c?.data?._id === item?._id
+                                ? Del_Fav(c?._id?.toString())
+                                : Add_To_Fav(item?._id?.toString())
+                            )
+                          : Add_To_Fav(item?._id?.toString())
+                      }
+                    >
+                      <Icon
+                        fill={
+                          dataset?.favourites?.length > 0
+                            ? dataset?.favourites?.find(
+                                (c) => c?.data?._id === item?._id
+                              )
+                              ? "#D22B2B"
+                              : "#fff"
+                            : "#fff"
+                        }
+                        color={
+                          dataset?.favourites?.length > 0
+                            ? dataset?.favourites?.find(
+                                (c) => c?.data?._id === item?._id
+                              )
+                              ? "#D22B2B"
+                              : "#000"
+                            : "#000"
+                        }
+                        as={Heart}
+                        size="xl"
+                      />
+                    </Pressable>
                   </View>
                 </View>
                 <Image
                   style={{
+                    marginVertical: 10,
                     width: "100%",
                     height: undefined,
-                    aspectRatio: 1,
+                    aspectRatio: 2,
                     resizeMode: "contain",
                   }}
-                  source={{ uri: `data:image/png;base64,${item?.image}`}}
+                  source={{ uri: `data:image/png;base64,${item?.image}` }}
                   alt={"---"}
                 />
                 <View style={{ flexDirection: "row" }}>
                   <View style={{ width: "80%" }}>
                     <Text color="#000" bold>
-                      Alo
+                      {item?.name}
                     </Text>
-                    <Text>Name</Text>
-                    <Text>Rs 249</Text>
+                    {/* <Text>Name</Text> */}
+                    <Text>Rs{item?.price}</Text>
                   </View>
                   <View style={{ width: "0%" }}>
-                    <Icon fill={"#000"} as={Plus} size="xl" />
+                    <Pressable onPress={() => Add_To_Cart(item, 1)}>
+                      <Icon fill={"#000"} as={Plus} size="xl" />
+                    </Pressable>
                   </View>
                 </View>
               </Box>

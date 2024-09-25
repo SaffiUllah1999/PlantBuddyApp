@@ -22,6 +22,10 @@ import { Box } from "@gluestack-ui/themed";
 import Carefull from "../components/Details/Carefull";
 import Place from "../components/Details/Place";
 import Characteristic from "../components/Details/Characteristic";
+import { Alert } from "react-native";
+import CommonDataService from "../services/common_data";
+import { SERVICE_ROUTE } from "../services/endpoints";
+import { useData } from "../hooks/useData";
 
 const FirstRoute = () => (
   <ScrollView>
@@ -100,12 +104,7 @@ const FirstRoute = () => (
                   justifyContent: "center",
                 }}
               >
-                <Icon
-                  borderColor="#fff"
-                  fill={"#fff"}
-                  as={Droplet}
-                  size="md"
-                />
+                <Icon borderColor="#fff" fill={"#fff"} as={Droplet} size="md" />
               </View>
             </Pressable>
           </View>
@@ -185,13 +184,7 @@ const FirstRoute = () => (
                   justifyContent: "center",
                 }}
               >
-                <Icon
-                  borderColor="#fff"
-               
-                  fill={"#fff"}
-                  as={Droplet}
-                  size="md"
-                />
+                <Icon borderColor="#fff" fill={"#fff"} as={Droplet} size="md" />
               </View>
             </Pressable>
           </View>
@@ -221,17 +214,45 @@ const renderScene = SceneMap({
   third: Third,
 });
 
-export default function Details() {
+
+
+
+export default function Details({route}) {
   const navigation = useNavigation();
   const layout = useWindowDimensions();
   const [current, setCurrent] = useState(1);
+  const { userData, setUserData } = useData();
+  const commonDataService= new CommonDataService()
+
+  const Add_Score = (c) => {
+    console.log("entered");
+    let data_set = {
+      email: userData?.email,
+      scoreToAdd : 100
+    };
+  
+    console.log(JSON.stringify(data_set));
+  
+    commonDataService
+      .executeApiCall(SERVICE_ROUTE.ADD_SCORE, data_set)
+      .then((res) => {
+        // setShowModal(true)
+      })
+      .catch(function (error) {
+        if (error) {
+          console.log(JSON.stringify(error.response?.data));
+          Alert.alert(
+            "Error", // Title of the alert
+            error?.response?.data?.message, // Message of the alert
+            [{ text: "OK" }] // Buttons array, with an OK button
+          );
+        }
+      });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4EF" }}>
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        
-      >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{ backgroundColor: "#F0F4EF", paddingTop: 20 }}>
           <View
             style={{
@@ -266,7 +287,7 @@ export default function Details() {
           style={{
             backgroundColor: "#fff",
             flex: 1,
-       
+
             borderTopLeftRadius: 50,
             borderTopRightRadius: 50,
           }}
@@ -279,8 +300,8 @@ export default function Details() {
             }}
           >
             <View style={{ width: "70%" }}>
-              <Text>Aloe Vera</Text>
-              <Text>Price</Text>
+              <Text>{route?.params?.data?.name}</Text>
+              <Text>Rs{route?.params?.data?.price}</Text>
             </View>
             <View style={{ width: "30%" }}>
               <View
@@ -358,46 +379,67 @@ export default function Details() {
               borderRadius={20}
               isDisabled={false}
               isFocusVisible={false}
+              onPress={() =>
+                Alert.alert(
+                  "Alert",
+                  "are you sure to donate plant ?",
+                  [
+                    ({ text: "cancel" }), ({ text: "OK" ,onPress: ()=> Add_Score()})
+                  ] // Buttons array, with an OK button
+                )
+              }
             >
               <ButtonText>Donate Plant </ButtonText>
             </Button>
           </View>
 
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <Pressable onPress={()=> setCurrent(1)}>
+            <Pressable onPress={() => setCurrent(1)}>
               <Box
-                bg={current===1 ? "#475E3E" : "#fff"}
+                bg={current === 1 ? "#475E3E" : "#fff"}
                 justifyContent="center"
                 borderRadius={40}
                 marginHorizontal={10}
               >
-                <Text color={current === 1 ? "#fff" :"#D0D5DD"} paddingHorizontal={20} paddingVertical={10}>
+                <Text
+                  color={current === 1 ? "#fff" : "#D0D5DD"}
+                  paddingHorizontal={20}
+                  paddingVertical={10}
+                >
                   Careful
                 </Text>
               </Box>
             </Pressable>
-            <Pressable onPress={()=> setCurrent(2)}>
+            <Pressable onPress={() => setCurrent(2)}>
               <Box
-                  bg={current===2 ? "#475E3E" : "#fff"}
+                bg={current === 2 ? "#475E3E" : "#fff"}
                 justifyContent="center"
                 borderColor={"#D0D5DD"}
                 borderRadius={50}
                 marginHorizontal={10}
               >
-                <Text color={current === 2 ? "#fff" :"#D0D5DD"} paddingHorizontal={20} paddingVertical={10}>
+                <Text
+                  color={current === 2 ? "#fff" : "#D0D5DD"}
+                  paddingHorizontal={20}
+                  paddingVertical={10}
+                >
                   Place
                 </Text>
               </Box>
             </Pressable>
-            <Pressable onPress={()=> setCurrent(3)}>
+            <Pressable onPress={() => setCurrent(3)}>
               <Box
-                 bg={current===3 ? "#475E3E" : "#fff"}
+                bg={current === 3 ? "#475E3E" : "#fff"}
                 borderColor={"#D0D5DD"}
                 justifyContent="center"
                 borderRadius={50}
                 marginHorizontal={10}
               >
-                <Text color={current === 3 ? "#fff" :"#D0D5DD"} paddingHorizontal={20} paddingVertical={10}>
+                <Text
+                  color={current === 3 ? "#fff" : "#D0D5DD"}
+                  paddingHorizontal={20}
+                  paddingVertical={10}
+                >
                   Characteristics
                 </Text>
               </Box>

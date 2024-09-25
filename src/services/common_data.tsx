@@ -1,7 +1,12 @@
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useEffect, useState} from 'react';
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
+import * as Network from "expo-network";
 
+const GetIp = async () => {
+  let ip = await Network.getIpAddressAsync();
+  return ip
+};
 
 export const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -12,29 +17,28 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async function (config: any) {
-
     config.headers = {
       ...config.headers,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     };
-   
+
     return config;
   },
   function (error) {
     return Promise.reject(error);
-  },
+  }
 );
 
-export const REACT_APP_API_URL = 'http://192.168.5.57:3000'; // FDP Local
+export const REACT_APP_API_URL = "http://192.168.5.57:3000"; // FDP Local
 export default class CommonDataService {
   executeApiCall(path, data) {
-    console.log(`${REACT_APP_API_URL}${path}`+JSON.stringify(data))
+    console.log(`${REACT_APP_API_URL}${path}` + JSON.stringify(data));
     return axiosInstance
       .post(`${REACT_APP_API_URL}${path}`, data)
       .then((res) => res);
   }
 
-  removeCall(path) {
+  removeCall(path,) {
     return axiosInstance
       .delete(`${REACT_APP_API_URL}${path}`)
       .then((res) => res);
@@ -44,6 +48,9 @@ export default class CommonDataService {
     return axiosInstance.get(`${REACT_APP_API_URL}${path}`).then((res) => res);
   }
 
-
-
+  fetchData_2(path, data) {
+    return axiosInstance
+    .get(`${REACT_APP_API_URL}${path}`, data)
+    .then((res) => res);
+  }
 }

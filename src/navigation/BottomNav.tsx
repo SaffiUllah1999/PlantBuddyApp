@@ -7,6 +7,7 @@ import { BookOpen, Camera, Globe, House, UserRound } from "lucide-react-native";
 import { Icon } from "@gluestack-ui/themed";
 import Profile from "../screens/Profile";
 import Articles from "../screens/Articles";
+import Browse from "../screens/Browse";
 
 function HomeScreen() {
   return (
@@ -131,7 +132,7 @@ export default function BottomNav() {
       />
       <Tab.Screen
         name="Browse"
-        component={Articles}
+        component={Browse}
         options={{
           tabBarLabel: "Browse",
           headerShown: false,
