@@ -75,6 +75,7 @@ export default function Browse({ route }) {
     console.log("entered");
     let dataset = {
       email: c?.email,
+      name : c?.name,
       image: image,
     };
 
@@ -163,10 +164,11 @@ export default function Browse({ route }) {
           // }
           renderItem={({ item }) => (
             <Pressable flex={1}>
-              <View style={{ width: "100%", margin:5, alignItems: "flex-start" }}>
+              <View style={{ width: "100%", margin:5, alignItems: "flex-start" , flexDirection:"row" }}>
                 <Avatar bgColor="$amber600" size="sm" borderRadius="$full">
                   <AvatarFallbackText>Avatar</AvatarFallbackText>
                 </Avatar>
+                <Text>{item?.name}</Text>
               </View>
               <Box bg="#fff" p="$5" margin={5} borderRadius={13}>
                 <View style={{ flexDirection: "row" }}></View>

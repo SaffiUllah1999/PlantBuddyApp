@@ -49,18 +49,18 @@ export default function Login() {
 
   const handle_Login = (c) => {
     console.log("entered");
-    let dataset = {
+    let data_set = {
       email: c?.email,
       password: c?.password,
     };
 
     commonDataService
-      .executeApiCall(SERVICE_ROUTE.LOGIN, dataset)
+      .executeApiCall(SERVICE_ROUTE.LOGIN, data_set)
       .then((res) => {
         console.log("Resend :" + JSON.stringify(res));
-        setUserData((c) => ({...c, email:dataset?.email }));
+        setUserData((c) => ({...c, email:data_set?.email , name : res?.data?.name }));
         setloading(false)
-        res?.data?.toString() === "true"
+        dataset?.tutorial
           ? navigation.navigate("Home")
           : navigation.navigate("Tutorial");
       })

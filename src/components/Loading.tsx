@@ -19,7 +19,7 @@ const Loading = () => {
       }}
     >
       <AnimatedLottieView
-        speed={1}
+        speed={2}
         autoPlay
         loop={true}
         // ref={animation}

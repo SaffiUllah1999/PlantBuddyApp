@@ -11,5 +11,7 @@ export const SERVICE_ROUTE = {
   GET_ARTICLES:"/getarticles",
   ADD_SCORE:"/addscore",
   UPLOAD_PICTURES:"/uploadpersonalpictures",
-  GET_FEED:"/getpersonalpictures"
+  GET_FEED:"/getpersonalpictures",
+  GET_PERSONAL_PICTURES:"/getprofilepersonalpictures",
+  PLACE_ORDER:"/placeOrder"
 };

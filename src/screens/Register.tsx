@@ -33,6 +33,7 @@ import { CloseIcon } from "@gluestack-ui/themed";
 import { ModalBody } from "@gluestack-ui/themed";
 import { ModalFooter } from "@gluestack-ui/themed";
 import AnimatedLottieView from "lottie-react-native";
+import moment from "moment";
 
 export default function Register() {
   const navigation = useNavigation();
@@ -45,6 +46,7 @@ export default function Register() {
         email: yup.string().email("Invalid Email").required("email required"),
         password: yup.string().required("Phone Number required"),
         confirm_Password: yup.string().required(),
+        name: yup.string().required(),
       });
     }
   };
@@ -58,6 +60,8 @@ export default function Register() {
       email: c?.email,
       password: c?.password,
       Score: 0,
+      name : c?.name,
+      dateCreated: moment().format()
     };
 
     commonDataService
@@ -98,6 +102,7 @@ export default function Register() {
             password: "",
             confirm_Password: "",
             checked: false,
+            name: "",
           }}
           validationSchema={validationSchema}
           onSubmit={handleFormSubmit}
@@ -150,6 +155,28 @@ export default function Register() {
                   <ModalFooter></ModalFooter>
                 </ModalContent>
               </Modal>
+              
+              <Text style={{ marginVertical: "4%" }}>Enter Full Name</Text>
+              <Input
+                borderRadius={10}
+                variant="outline"
+                size="md"
+                minHeight={45}
+                isDisabled={false}
+                isInvalid={false}
+                isReadOnly={false}
+              >
+                <InputField
+                  placeholder="Enter your full name"
+                  
+                  onChangeText={handleChange("name")}
+                />
+              </Input>
+
+              {touched.name && errors.name && (
+                <Text color={"$red400"}>Please Enter Fullname</Text>
+              )}
+
               <Text style={{ marginVertical: "4%" }}>Enter Email Address</Text>
               <Input
                 borderRadius={10}
@@ -213,6 +240,7 @@ export default function Register() {
               {touched.password && errors.password && (
                 <Text color={"$red400"}>Please Enter Password</Text>
               )}
+
 
               <Checkbox
                 size="md"

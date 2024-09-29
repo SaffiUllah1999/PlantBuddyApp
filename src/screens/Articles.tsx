@@ -169,7 +169,7 @@ export default function Articles() {
                     borderRadius: 15,
                     resizeMode: "stretch",
                   }}
-                  source={{ uri: `data:image/png;base64,${item?.image}` }}
+                  source={{ uri: item?.image }}
                   alt={"---"}
                 />
                 <View>

@@ -1,5 +1,5 @@
 import { View, FlatList, useWindowDimensions } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   AvatarFallbackText,
@@ -13,7 +13,7 @@ import {
 } from "@gluestack-ui/themed";
 import { ImageBackground } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   MapPin,
   Heart,
@@ -29,6 +29,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "@gluestack-ui/themed";
 import { ButtonText } from "@gluestack-ui/themed";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import { SERVICE_ROUTE } from "../services/endpoints";
+import CommonDataService from "../services/common_data";
+import { useData } from "../hooks/useData";
 
 const DATA = [
   {
@@ -53,51 +56,83 @@ const DATA = [
   },
 ];
 
-const FirstRoute = () => (
-  <FlatList
-    contentContainerStyle={{ flexGrow: 1 }}
-    data={DATA}
-    numColumns={3}
-    // refreshControl={
-    //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    // }
-    renderItem={({ item }) => (
-      <Pressable flex={0.5}>
-        <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
-          <Image
-            style={{
-              width: "100%",
-              height: undefined,
-              aspectRatio: 1,
-              resizeMode: "contain",
-            }}
-            source={require("../assets/images/image.png")}
-            alt={"---"}
-          />
-        </Box>
-      </Pressable>
-    )}
-    keyExtractor={(item) => item.id}
-  />
-);
-
-const SecondRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
-);
-
-const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-});
-
 export default function Profile() {
-  const navigation = useNavigation();
-  const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "first", title: "First" },
     { key: "second", title: "Second" },
   ]);
+  const navigation = useNavigation();
+  const layout = useWindowDimensions();
+  const [current, setCurrent] = useState(1);
+  const { userData, setUserData } = useData();
+  const [loading, setloading] = useState(true);
+  const [dataset, setDataset] = useState();
+  const [image, setImage] = useState(null);
+  const [base64String, setBase64String] = useState("");
+
+  const commonDataService = new CommonDataService();
+
+  const FirstRoute = () => (
+    <FlatList
+      contentContainerStyle={{ flexGrow: 1 }}
+      data={dataset}
+      numColumns={3}
+      // refreshControl={
+      //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      // }
+      renderItem={({ item }) => (
+        <Pressable flex={0.5}>
+          <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
+            <Image
+              style={{
+                width: "100%",
+                height: undefined,
+                aspectRatio: 1,
+                resizeMode: "contain",
+              }}
+              source={{ uri: item?.image }}
+              alt={"---"}
+            />
+          </Box>
+        </Pressable>
+      )}
+      keyExtractor={(item) => item.id}
+    />
+  );
+
+  const SecondRoute = () => (
+    <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
+  );
+
+  const renderScene = SceneMap({
+    first: FirstRoute,
+    second: SecondRoute,
+  });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      Get_Feed();
+    }, [])
+  );
+
+  const Get_Feed = () => {
+    let dataset = {
+      email: userData?.email,
+    };
+
+    console.log(dataset);
+    commonDataService
+      .fetchData_3(SERVICE_ROUTE.GET_PERSONAL_PICTURES, dataset)
+      .then((res) => {
+        setDataset(res?.data);
+        setloading(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+        setloading(false);
+      });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4EF" }}>
@@ -146,7 +181,7 @@ export default function Profile() {
                 style={{ paddingHorizontal: 10, justifyContent: "flex-end" }}
               >
                 <Text bold color={"white"}>
-                  Ali
+                  {userData?.name}
                 </Text>
                 {/* <Button bg={"white"}>
                   <ButtonText color={"black"}>Edit Profile</ButtonText>

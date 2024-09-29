@@ -6,7 +6,7 @@ const ThemeContext = createContext(null);
 
 export const DataProvidor = ({ children }: { children: React.ReactNode }) => {
 
-  const [userData, setUserData] = useState({ email: "" });
+  const [userData, setUserData] = useState({ email: "" , name:"" });
 
   const contextValue = {
     userData,

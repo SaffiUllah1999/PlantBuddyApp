@@ -1,4 +1,4 @@
-import { View, FlatList, Alert } from "react-native";
+import { View, FlatList, Alert,BackHandler } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
   Avatar,
@@ -158,6 +158,32 @@ export default function Home() {
     Get_Fav();
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert("Alert", "are you sure to logout?", [
+          {text:'cancel', onPress: () => console.log('')},
+          {
+            text: 'logout',
+            onPress: () => (
+          
+              navigation.reset({index: 0, routes: [{name: 'login'}]})
+            ),
+          },
+        ]);
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
+
+      return () => subscription.remove();
+    }, []),
+  );
+
+
   return loading ? (
     <Loading />
   ) : (
@@ -226,7 +252,7 @@ export default function Home() {
             </View>
             <View style={{ paddingHorizontal: 10, justifyContent: "flex-end" }}>
               <Text>Welcome</Text>
-              <Text bold>Ali</Text>
+              <Text bold>{userData?.name}</Text>
             </View>
           </View>
 
@@ -377,7 +403,7 @@ export default function Home() {
                     aspectRatio: 2,
                     resizeMode: "contain",
                   }}
-                  source={{ uri: `data:image/png;base64,${item?.image}` }}
+                  source={{ uri: item?.image }}
                   alt={"---"}
                 />
                 <View style={{ flexDirection: "row" }}>

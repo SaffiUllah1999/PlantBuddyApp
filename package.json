@@ -28,6 +28,7 @@
     "formik": "^2.4.6",
     "lottie-react-native": "5.1.4",
     "lucide-react-native": "^0.437.0",
+    "moment": "^2.30.1",
     "react": "18.2.0",
     "react-native": "0.71.14",
     "react-native-gesture-handler": "~2.9.0",
