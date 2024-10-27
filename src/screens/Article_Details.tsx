@@ -106,7 +106,7 @@ export default function Article_Details({ route }) {
               resizeMode: "stretch",
             }}
             source={{
-              uri: `data:image/png;base64,${route?.params?.data?.image}`,
+              uri: route?.params?.data?.image,
             }}
             alt={"---"}
           />

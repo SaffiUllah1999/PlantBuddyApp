@@ -1,4 +1,4 @@
-import { View, FlatList, Alert,BackHandler } from "react-native";
+import { View, FlatList, Alert, BackHandler } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
   Avatar,
@@ -40,6 +40,7 @@ export default function Home() {
   const navigation = useNavigation();
   const [loading, setloading] = useState(false);
   const [dataset, setDataset] = useState({
+    active_category: 1,
     products: [],
     favourites: [],
     modal: false,
@@ -51,7 +52,7 @@ export default function Home() {
   const ref = React.useRef(null);
 
   const Get_Products = () => {
-    // console.log("entered");
+    console.log("entered");
     // let dataset = {
     //   email: c?.email,
     //   password: c?.password,
@@ -162,27 +163,24 @@ export default function Home() {
     React.useCallback(() => {
       const onBackPress = () => {
         Alert.alert("Alert", "are you sure to logout?", [
-          {text:'cancel', onPress: () => console.log('')},
+          { text: "cancel", onPress: () => console.log("") },
           {
-            text: 'logout',
-            onPress: () => (
-          
-              navigation.reset({index: 0, routes: [{name: 'login'}]})
-            ),
+            text: "logout",
+            onPress: () =>
+              navigation.reset({ index: 0, routes: [{ name: "login" }] }),
           },
         ]);
         return true;
       };
 
       const subscription = BackHandler.addEventListener(
-        'hardwareBackPress',
-        onBackPress,
+        "hardwareBackPress",
+        onBackPress
       );
 
       return () => subscription.remove();
-    }, []),
+    }, [])
   );
-
 
   return loading ? (
     <Loading />
@@ -206,7 +204,12 @@ export default function Home() {
           <ModalBody>
             <Text>Quantity</Text>
             <Input>
-              <InputField placeholder="Enter Text here" onChangeText={(x)=> setDataset(c=>({...c, quantity: parseFloat(x)}))}/>
+              <InputField
+                placeholder="Enter Text here"
+                onChangeText={(x) =>
+                  setDataset((c) => ({ ...c, quantity: parseFloat(x) }))
+                }
+              />
             </Input>
           </ModalBody>
           <ModalFooter>
@@ -292,148 +295,357 @@ export default function Home() {
       <Text bold style={{ marginHorizontal: "3%" }} size="xl" color="#000">
         Category
       </Text>
-      <View style={{ height: "6%", marginVertical: 20 }}>
+      <View style={{ height: "5%", marginVertical: 20 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <Box
-            bg="#475E3E"
-            justifyContent="center"
-            borderRadius={40}
-            marginHorizontal={10}
+          <Pressable
+            onPress={() => setDataset((c) => ({ ...c, active_category: 1 }))}
+            style={{ height: 50 }}
           >
-            <Text color="white" paddingHorizontal={20}>
-              All
-            </Text>
-          </Box>
-          <Box
-            bg="#fff"
-            justifyContent="center"
-            borderWidth={1}
-            borderColor={"#D0D5DD"}
-            borderRadius={50}
-            marginHorizontal={10}
+            <Box
+              bg={dataset?.active_category === 1 ? "#475E3E" : "#fff"}
+              justifyContent="center"
+              style={{ height: "80%" }}
+              borderRadius={40}
+              marginHorizontal={10}
+            >
+              <Text
+                color={dataset?.active_category === 1 ? "white" : "#D0D5DD"}
+                paddingHorizontal={20}
+              >
+                All
+              </Text>
+            </Box>
+          </Pressable>
+          <Pressable
+            onPress={() => setDataset((c) => ({ ...c, active_category: 2 }))}
+            style={{ height: 50 }}
           >
-            <Text color="#D0D5DD" paddingHorizontal={20}>
-              Indoor
-            </Text>
-          </Box>
-          <Box
-            bg="#fff"
-            borderWidth={1}
-            borderColor={"#D0D5DD"}
-            justifyContent="center"
-            borderRadius={50}
-            marginHorizontal={10}
+            <Box
+              bg={dataset?.active_category === 2 ? "#475E3E" : "#fff"}
+              justifyContent="center"
+              style={{ height: "80%" }}
+              borderWidth={1}
+              borderColor={"#D0D5DD"}
+              borderRadius={50}
+              marginHorizontal={10}
+            >
+              <Text
+                color={dataset?.active_category === 2 ? "white" : "#D0D5DD"}
+                paddingHorizontal={20}
+              >
+                Indoor
+              </Text>
+            </Box>
+          </Pressable>
+          <Pressable
+            onPress={() => setDataset((c) => ({ ...c, active_category: 3 }))}
+            style={{ height: 50 }}
           >
-            <Text color="#D0D5DD" paddingHorizontal={20}>
-              Outdoor
-            </Text>
-          </Box>
-          <Box
-            bg="#fff"
-            borderWidth={1}
-            borderColor={"#D0D5DD"}
-            justifyContent="center"
-            borderRadius={50}
-            marginHorizontal={10}
+            <Box
+              bg={dataset?.active_category === 3 ? "#475E3E" : "#fff"}
+              borderWidth={1}
+              style={{ height: "80%" }}
+              borderColor={"#D0D5DD"}
+              justifyContent="center"
+              borderRadius={50}
+              marginHorizontal={10}
+            >
+              <Text
+                color={dataset?.active_category === 3 ? "white" : "#D0D5DD"}
+                paddingHorizontal={20}
+              >
+                Outdoor
+              </Text>
+            </Box>
+          </Pressable>
+          <Pressable
+            onPress={() => setDataset((c) => ({ ...c, active_category: 4 }))}
+            style={{ height: 50 }}
           >
-            <Text color="#D0D5DD" paddingHorizontal={20}>
-              Favourite
-            </Text>
-          </Box>
+            <Box
+              bg={dataset?.active_category === 4 ? "#475E3E" : "#fff"}
+              borderWidth={1}
+              style={{ height: "80%" }}
+              borderColor={"#D0D5DD"}
+              justifyContent="center"
+              borderRadius={50}
+              marginHorizontal={10}
+            >
+              <Text
+                color={dataset?.active_category === 4 ? "white" : "#D0D5DD"}
+                paddingHorizontal={20}
+              >
+                Favourite
+              </Text>
+            </Box>
+          </Pressable>
         </ScrollView>
       </View>
-      <View style={{ height: "60%" }}>
-        <FlatList
-          data={dataset?.products}
-          numColumns={2}
-          style={{ paddingHorizontal: 10 }}
-          // refreshControl={
-          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          // }
-          renderItem={({ item }) => (
-            <Pressable
-              onPress={() => navigation.navigate("Details", { data: item })}
-              flex={1}
-            >
-              <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
-                <View style={{ flexDirection: "row" }}>
-                  <View style={{ width: "80%" }}></View>
-                  <View style={{ width: "20%" }}>
-                    <Pressable
-                      onPress={() =>
-                        dataset?.favourites.length > 0
-                          ? dataset?.favourites?.find((c) =>
-                              c?.data?._id === item?._id
-                                ? Del_Fav(c?._id?.toString())
-                                : Add_To_Fav(item?._id?.toString())
-                            )
-                          : Add_To_Fav(item?._id?.toString())
-                      }
-                    >
-                      <Icon
-                        fill={
-                          dataset?.favourites?.length > 0
-                            ? dataset?.favourites?.find(
-                                (c) => c?.data?._id === item?._id
+
+      {dataset?.active_category === 1 ? (
+        <View style={{ height: "60%" }}>
+          <FlatList
+            data={dataset?.products}
+            numColumns={2}
+            style={{ paddingHorizontal: 10 }}
+            // refreshControl={
+            //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            // }
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() => navigation.navigate("Details", { data: item })}
+                flex={1}
+              >
+                <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ width: "80%" }}></View>
+                    <View style={{ width: "20%" }}>
+                      <Pressable
+                        onPress={() =>
+                          dataset?.favourites.length > 0
+                            ? dataset?.favourites?.find((c) =>
+                                c?.data?._id === item?._id
+                                  ? Del_Fav(c?._id?.toString())
+                                  : Add_To_Fav(item?._id?.toString())
                               )
-                              ? "#D22B2B"
+                            : Add_To_Fav(item?._id?.toString())
+                        }
+                      >
+                        <Icon
+                          fill={
+                            dataset?.favourites?.length > 0
+                              ? dataset?.favourites?.find(
+                                  (c) => c?.data?._id === item?._id
+                                )
+                                ? "#D22B2B"
+                                : "#fff"
                               : "#fff"
-                            : "#fff"
-                        }
-                        color={
-                          dataset?.favourites?.length > 0
-                            ? dataset?.favourites?.find(
-                                (c) => c?.data?._id === item?._id
-                              )
-                              ? "#D22B2B"
+                          }
+                          color={
+                            dataset?.favourites?.length > 0
+                              ? dataset?.favourites?.find(
+                                  (c) => c?.data?._id === item?._id
+                                )
+                                ? "#D22B2B"
+                                : "#000"
                               : "#000"
-                            : "#000"
+                          }
+                          as={Heart}
+                          size="xl"
+                        />
+                      </Pressable>
+                    </View>
+                  </View>
+                  <Image
+                    style={{
+                      marginVertical: 10,
+                      width: "100%",
+                      height: undefined,
+                      aspectRatio: 2,
+                      resizeMode: "contain",
+                    }}
+                    source={{ uri: item?.image }}
+                    alt={"---"}
+                  />
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ width: "80%" }}>
+                      <Text color="#000" bold>
+                        {item?.name}
+                      </Text>
+                      {/* <Text>Name</Text> */}
+                      <Text>Rs{item?.price}</Text>
+                    </View>
+                    <View style={{ width: "0%" }}>
+                      <Pressable
+                        onPress={() =>
+                          setDataset((c) => ({
+                            ...c,
+                            modal: true,
+                            item_selected: item,
+                          }))
                         }
-                        as={Heart}
-                        size="xl"
-                      />
-                    </Pressable>
+                      >
+                        <Icon fill={"#000"} as={Plus} size="xl" />
+                      </Pressable>
+                    </View>
                   </View>
-                </View>
-                <Image
-                  style={{
-                    marginVertical: 10,
-                    width: "100%",
-                    height: undefined,
-                    aspectRatio: 2,
-                    resizeMode: "contain",
-                  }}
-                  source={{ uri: item?.image }}
-                  alt={"---"}
-                />
-                <View style={{ flexDirection: "row" }}>
-                  <View style={{ width: "80%" }}>
-                    <Text color="#000" bold>
-                      {item?.name}
-                    </Text>
-                    {/* <Text>Name</Text> */}
-                    <Text>Rs{item?.price}</Text>
+                </Box>
+              </Pressable>
+            )}
+            keyExtractor={(item) => item._id}
+          />
+        </View>
+      ) : dataset?.active_category === 2 ? (
+        <View style={{ height: "60%" }}>
+          <FlatList
+            data={dataset?.products?.filter((x) => x?.category === 1)}
+            numColumns={2}
+            style={{ paddingHorizontal: 10 }}
+            // refreshControl={
+            //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            // }
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() => navigation.navigate("Details", { data: item })}
+                flex={1}
+              >
+                <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ width: "80%" }}></View>
+                    <View style={{ width: "20%" }}>
+                      <Pressable
+                        onPress={() =>
+                          dataset?.favourites.length > 0
+                            ? dataset?.favourites?.find((c) =>
+                                c?.data?._id === item?._id
+                                  ? Del_Fav(c?._id?.toString())
+                                  : Add_To_Fav(item?._id?.toString())
+                              )
+                            : Add_To_Fav(item?._id?.toString())
+                        }
+                      >
+                        <Icon
+                          fill={
+                            dataset?.favourites?.length > 0
+                              ? dataset?.favourites?.find(
+                                  (c) => c?.data?._id === item?._id
+                                )
+                                ? "#D22B2B"
+                                : "#fff"
+                              : "#fff"
+                          }
+                          color={
+                            dataset?.favourites?.length > 0
+                              ? dataset?.favourites?.find(
+                                  (c) => c?.data?._id === item?._id
+                                )
+                                ? "#D22B2B"
+                                : "#000"
+                              : "#000"
+                          }
+                          as={Heart}
+                          size="xl"
+                        />
+                      </Pressable>
+                    </View>
                   </View>
-                  <View style={{ width: "0%" }}>
-                    <Pressable
-                      onPress={() =>
-                        setDataset((c) => ({
-                          ...c,
-                          modal: true,
-                          item_selected: item,
-                        }))
-                      }
-                    >
-                      <Icon fill={"#000"} as={Plus} size="xl" />
-                    </Pressable>
+                  <Image
+                    style={{
+                      marginVertical: 10,
+                      width: "100%",
+                      height: undefined,
+                      aspectRatio: 2,
+                      resizeMode: "contain",
+                    }}
+                    source={{ uri: item?.image }}
+                    alt={"---"}
+                  />
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ width: "80%" }}>
+                      <Text color="#000" bold>
+                        {item?.name}
+                      </Text>
+                      {/* <Text>Name</Text> */}
+                      <Text>Rs{item?.price}</Text>
+                    </View>
+                    <View style={{ width: "0%" }}>
+                      <Pressable
+                        onPress={() =>
+                          setDataset((c) => ({
+                            ...c,
+                            modal: true,
+                            item_selected: item,
+                          }))
+                        }
+                      >
+                        <Icon fill={"#000"} as={Plus} size="xl" />
+                      </Pressable>
+                    </View>
                   </View>
-                </View>
-              </Box>
-            </Pressable>
-          )}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
+                </Box>
+              </Pressable>
+            )}
+            keyExtractor={(item) => item._id}
+          />
+        </View>
+      ) : dataset?.active_category === 4 ? (
+        <View style={{ height: "60%" }}>
+          <FlatList
+            data={dataset?.favourites}
+            numColumns={2}
+            style={{ paddingHorizontal: 10 }}
+            // refreshControl={
+            //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            // }
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() => navigation.navigate("Details", { data: item })}
+                flex={1}
+              >
+                <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ width: "80%" }}></View>
+                    <View style={{ width: "20%" }}>
+                      <Pressable
+                        onPress={() =>
+                          dataset?.favourites?.length > 0
+                            ? dataset?.favourites?.find((c) =>
+                                Del_Fav(c?._id?.toString())
+                              )
+                            : Add_To_Fav(item?._id?.toString())
+                        }
+                      >
+                        <Icon
+                          fill={"#D22B2B"}
+                          color={"#D22B2B"}
+                          as={Heart}
+                          size="xl"
+                        />
+                      </Pressable>
+                    </View>
+                  </View>
+                  <Image
+                    style={{
+                      marginVertical: 10,
+                      width: "100%",
+                      height: undefined,
+                      aspectRatio: 2,
+                      resizeMode: "contain",
+                    }}
+                    source={{ uri: item?.data?.image }}
+                    alt={"---"}
+                  />
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ width: "80%" }}>
+                      <Text color="#000" bold>
+                        {item?.data?.name}
+                      </Text>
+                      {/* <Text>Name</Text> */}
+                      <Text>Rs{item?.data?.price}</Text>
+                    </View>
+                    <View style={{ width: "0%" }}>
+                      <Pressable
+                        onPress={() =>
+                          setDataset((c) => ({
+                            ...c,
+                            modal: true,
+                            item_selected: item,
+                          }))
+                        }
+                      >
+                        <Icon fill={"#000"} as={Plus} size="xl" />
+                      </Pressable>
+                    </View>
+                  </View>
+                </Box>
+              </Pressable>
+            )}
+            keyExtractor={(item) => item?._id}
+          />
+        </View>
+      ) : (
+        <></>
+      )}
     </View>
   );
 }

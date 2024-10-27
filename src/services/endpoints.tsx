@@ -13,5 +13,6 @@ export const SERVICE_ROUTE = {
   UPLOAD_PICTURES:"/uploadpersonalpictures",
   GET_FEED:"/getpersonalpictures",
   GET_PERSONAL_PICTURES:"/getprofilepersonalpictures",
-  PLACE_ORDER:"/placeOrder"
+  PLACE_ORDER:"/placeOrder",
+  USER_GET:"/getUsers"
 };
