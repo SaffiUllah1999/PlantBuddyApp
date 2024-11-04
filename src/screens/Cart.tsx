@@ -8,6 +8,7 @@ import {
   Image,
   Button,
   ButtonText,
+  ModalContent,
 } from "@gluestack-ui/themed";
 import { ChevronLeftIcon, Trash2 } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -16,11 +17,21 @@ import { SERVICE_ROUTE } from "../services/endpoints";
 import { useFocusEffect } from "@react-navigation/native";
 import { useData } from "../hooks/useData";
 import moment from "moment";
+import { Modal } from "@gluestack-ui/themed";
+import { ModalBackdrop } from "@gluestack-ui/themed";
+import { ModalHeader } from "@gluestack-ui/themed";
+import { Heading } from "@gluestack-ui/themed";
+import { ModalCloseButton } from "@gluestack-ui/themed";
+import { CloseIcon } from "@gluestack-ui/themed";
+import { ModalBody } from "@gluestack-ui/themed";
+import { ModalFooter } from "@gluestack-ui/themed";
+import AnimatedLottieView from "lottie-react-native";
 
 export default function Cart() {
   const commonDataService = new CommonDataService();
   const { userData } = useData();
   const [dataset, setDataset] = useState({ products: [], totalPrice: "" });
+  const [showModal, setShowModal] = useState(false);
 
   const Get_Products = () => {
     const dataset = { email: userData?.email };
@@ -54,7 +65,7 @@ export default function Cart() {
 
   const PlaceOrder = () => {
     const orders = dataset.products.map((item) => ({
-      email:userData?.email,
+      email: userData?.email,
       product_id: item?.data?._id,
       added_date: moment().format(),
       name: item?.data?.name,
@@ -92,7 +103,7 @@ export default function Cart() {
   return (
     <View style={{ height: "100%", backgroundColor: "#fff" }}>
       <View style={{ flexDirection: "row", height: "15%" }}>
-      <View style={{ width: "35%", justifyContent: "center" }}>
+        <View style={{ width: "35%", justifyContent: "center" }}>
           <Pressable
             onPress={() => navigation.goBack()}
             style={{ paddingHorizontal: 10 }}
@@ -118,6 +129,39 @@ export default function Cart() {
         </Pressable>
       </View>
       <View style={{ height: "50%", paddingVertical: 10 }}>
+        <Modal
+          isOpen={showModal}
+          onClose={() => {
+            setShowModal(false);
+          }}
+        >
+          <ModalBackdrop />
+          <ModalContent>
+            <ModalHeader>
+              <ModalCloseButton onPress={() => navigation.navigate("login")}>
+                <Icon as={CloseIcon} size="xl" />
+              </ModalCloseButton>
+            </ModalHeader>
+            <ModalBody>
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <AnimatedLottieView
+                  speed={1}
+                  duration={5000}
+                  autoPlay
+                  loop={true}
+                  // ref={animation}
+                  style={{ width: 250, height: 250 }}
+                  resizeMode="cover"
+                  source={require("../assets/animation/Success.json")}
+                />
+                <Text bold alignSelf="center">
+                  Order Placed Successfully
+                </Text>
+              </View>
+            </ModalBody>
+            <ModalFooter></ModalFooter>
+          </ModalContent>
+        </Modal>
         <FlatList
           data={dataset?.products}
           style={{ paddingHorizontal: 10 }}

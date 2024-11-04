@@ -168,7 +168,7 @@ export default function Browse({ route }) {
                 <Avatar bgColor="$amber600" size="sm" borderRadius="$full">
                   <AvatarFallbackText>Avatar</AvatarFallbackText>
                 </Avatar>
-                <Text>{item?.name}</Text>
+                <Text style={{marginLeft:10}}>{item?.name}</Text>
               </View>
               <Box bg="#fff" p="$5" margin={5} borderRadius={13}>
                 <View style={{ flexDirection: "row" }}></View>

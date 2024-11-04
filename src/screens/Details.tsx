@@ -26,6 +26,7 @@ import { Alert } from "react-native";
 import CommonDataService from "../services/common_data";
 import { SERVICE_ROUTE } from "../services/endpoints";
 import { useData } from "../hooks/useData";
+import moment from "moment";
 
 const FirstRoute = () => (
   <ScrollView>
@@ -214,25 +215,23 @@ const renderScene = SceneMap({
   third: Third,
 });
 
-
-
-
-export default function Details({route}) {
+export default function Details({ route }) {
   const navigation = useNavigation();
   const layout = useWindowDimensions();
   const [current, setCurrent] = useState(1);
   const { userData, setUserData } = useData();
-  const commonDataService= new CommonDataService()
+  const commonDataService = new CommonDataService();
+  const [quantity, setQuantity] = useState("1");
 
   const Add_Score = (c) => {
     console.log("entered");
     let data_set = {
       email: userData?.email,
-      scoreToAdd : 100
+      scoreToAdd: 100,
     };
-  
+
     console.log(JSON.stringify(data_set));
-  
+
     commonDataService
       .executeApiCall(SERVICE_ROUTE.ADD_SCORE, data_set)
       .then((res) => {
@@ -247,6 +246,28 @@ export default function Details({route}) {
             [{ text: "OK" }] // Buttons array, with an OK button
           );
         }
+      });
+  };
+
+  const PlaceOrder = () => {
+    const orders = [
+      {
+        email: userData?.email,
+        product_id: route?.params?.data?._id,
+        added_date: moment().format(),
+        name: route?.params?.data?.name,
+        price: route?.params?.data?.price,
+        quantity: parseInt(quantity),
+      },
+    ];
+
+    commonDataService
+      .executeApiCall(SERVICE_ROUTE.PLACE_ORDER, { orders })
+      .then((res) => {
+        Alert.alert("Success", "Order placed successfully!", [{ text: "OK" }]);
+      })
+      .catch((error) => {
+        Alert.alert("Error", error?.response?.data?.message, [{ text: "OK" }]);
       });
   };
 
@@ -274,7 +295,7 @@ export default function Details({route}) {
                   aspectRatio: 1,
                   resizeMode: "contain",
                 }}
-                source={require("../assets/images/image.png")}
+                source={route?.params?.data?.image}
                 alt={"---"}
               />
             </View>
@@ -313,11 +334,12 @@ export default function Details({route}) {
                   padding: 5,
                 }}
               >
-                <View
+                <Pressable
                   style={{
                     justifyContent: "center",
                     borderRadius: 100,
                   }}
+                  onPress={() => setQuantity(parseInt(quantity) + 1)}
                 >
                   <Icon
                     fill={"#B5C9AD"}
@@ -325,17 +347,22 @@ export default function Details({route}) {
                     color={"#fff"}
                     size="xl"
                   />
-                </View>
+                </Pressable>
                 <View
                   style={{ marginHorizontal: 10, justifyContent: "center" }}
                 >
-                  <Text>5</Text>
+                  <Text>{quantity}</Text>
                 </View>
-                <View
+                <Pressable
                   style={{
                     justifyContent: "center",
                     borderRadius: 100,
                   }}
+                  onPress={() =>
+                    parseInt(quantity) > 0
+                      ? setQuantity((parseInt(quantity) - 1)?.toString())
+                      : ""
+                  }
                 >
                   <Icon
                     fill={"#B5C9AD"}
@@ -343,7 +370,7 @@ export default function Details({route}) {
                     color={"#fff"}
                     size="xl"
                   />
-                </View>
+                </Pressable>
               </View>
             </View>
           </View>
@@ -367,6 +394,7 @@ export default function Details({route}) {
               isDisabled={false}
               isFocusVisible={false}
               borderRadius={20}
+              onPress={()=> PlaceOrder()}
             >
               <ButtonText>Buy Now </ButtonText>
             </Button>
@@ -384,7 +412,8 @@ export default function Details({route}) {
                   "Alert",
                   "are you sure to donate plant ?",
                   [
-                    ({ text: "cancel" }), ({ text: "OK" ,onPress: ()=> Add_Score()})
+                    { text: "cancel" },
+                    { text: "OK", onPress: () => Add_Score() },
                   ] // Buttons array, with an OK button
                 )
               }

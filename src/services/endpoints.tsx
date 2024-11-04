@@ -14,5 +14,6 @@ export const SERVICE_ROUTE = {
   GET_FEED:"/getpersonalpictures",
   GET_PERSONAL_PICTURES:"/getprofilepersonalpictures",
   PLACE_ORDER:"/placeOrder",
-  USER_GET:"/getUsers"
+  USER_GET:"/getUsers",
+  GET_LEADERBOARD_DATA:"/getLeaderBoardUsers"
 };

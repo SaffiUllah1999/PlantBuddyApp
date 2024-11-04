@@ -9,10 +9,11 @@ import {
   Box,
 } from "@gluestack-ui/themed";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { ChevronLeftIcon } from "lucide-react-native";
 import CommonDataService from "../services/common_data";
 import { SERVICE_ROUTE } from "../services/endpoints";
+
 
 export default function Leaderboard() {
   const commonDataService = new CommonDataService();
@@ -20,11 +21,11 @@ export default function Leaderboard() {
 
   const Get_Fav = () => {
     commonDataService
-      .fetchData(SERVICE_ROUTE.USER_GET)
+      .fetchData(SERVICE_ROUTE.GET_LEADERBOARD_DATA)
       .then((res) => {
         // Sort data by score in ascending order
-        const sortedData = res?.data.sort((a, b) => a.score - b.score);
-        setDataset({ data: sortedData, loading: false });
+        // const sortedData = res?.data.sort((a, b) => a.score - b.score);
+        setDataset({ data: res?.data, loading: false });
       })
       .catch((error) => {
         console.log(error);
@@ -32,9 +33,12 @@ export default function Leaderboard() {
       });
   };
 
-  useEffect(() => {
-    Get_Fav();
-  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      Get_Fav();
+    }, [])
+  );
 
   const navigation = useNavigation();
 
