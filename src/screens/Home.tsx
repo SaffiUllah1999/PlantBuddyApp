@@ -478,7 +478,101 @@ export default function Home() {
       ) : dataset?.active_category === 2 ? (
         <View style={{ height: "60%" }}>
           <FlatList
-            data={dataset?.products?.filter((x) => x?.category === 1)}
+            data={dataset?.products?.filter((x) => x?.category?.toString() === '1')}
+            numColumns={2}
+            style={{ paddingHorizontal: 10 }}
+            // refreshControl={
+            //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            // }
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() => navigation.navigate("Details", { data: item })}
+                flex={1}
+              >
+                <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ width: "80%" }}></View>
+                    <View style={{ width: "20%" }}>
+                      <Pressable
+                        onPress={() =>
+                          dataset?.favourites.length > 0
+                            ? dataset?.favourites?.find((c) =>
+                                c?.data?._id === item?._id
+                                  ? Del_Fav(c?._id?.toString())
+                                  : Add_To_Fav(item?._id?.toString())
+                              )
+                            : Add_To_Fav(item?._id?.toString())
+                        }
+                      >
+                        <Icon
+                          fill={
+                            dataset?.favourites?.length > 0
+                              ? dataset?.favourites?.find(
+                                  (c) => c?.data?._id === item?._id
+                                )
+                                ? "#D22B2B"
+                                : "#fff"
+                              : "#fff"
+                          }
+                          color={
+                            dataset?.favourites?.length > 0
+                              ? dataset?.favourites?.find(
+                                  (c) => c?.data?._id === item?._id
+                                )
+                                ? "#D22B2B"
+                                : "#000"
+                              : "#000"
+                          }
+                          as={Heart}
+                          size="xl"
+                        />
+                      </Pressable>
+                    </View>
+                  </View>
+                  <Image
+                    style={{
+                      marginVertical: 10,
+                      width: "100%",
+                      height: undefined,
+                      aspectRatio: 2,
+                      resizeMode: "contain",
+                    }}
+                    source={{ uri: item?.image }}
+                    alt={"---"}
+                  />
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ width: "80%" }}>
+                      <Text color="#000" bold>
+                        {item?.name}
+                      </Text>
+                      {/* <Text>Name</Text> */}
+                      <Text>Rs{item?.price}</Text>
+                    </View>
+                    <View style={{ width: "0%" }}>
+                      <Pressable
+                        onPress={() =>
+                          setDataset((c) => ({
+                            ...c,
+                            modal: true,
+                            item_selected: item,
+                          }))
+                        }
+                      >
+                        <Icon fill={"#000"} as={Plus} size="xl" />
+                      </Pressable>
+                    </View>
+                  </View>
+                </Box>
+              </Pressable>
+            )}
+            keyExtractor={(item) => item._id}
+          />
+        </View>
+      ) : 
+       dataset?.active_category === 3 ? (
+        <View style={{ height: "60%" }}>
+          <FlatList
+            data={dataset?.products?.filter((x) => x?.category?.toString() === "2")}
             numColumns={2}
             style={{ paddingHorizontal: 10 }}
             // refreshControl={

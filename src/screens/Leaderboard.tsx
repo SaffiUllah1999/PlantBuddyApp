@@ -76,6 +76,7 @@ export default function Leaderboard() {
               <AvatarFallbackText>{user.name || "Avatar"}</AvatarFallbackText>
             </Avatar>
             <Text>{user.name || "Hello"}</Text>
+            <Text>{"Score : "+user.Score || "000"}</Text>
           </View>
         ))}
       </View>
@@ -97,6 +98,7 @@ export default function Leaderboard() {
                     <AvatarFallbackText>{item.name || "Avatar"}</AvatarFallbackText>
                   </Avatar>
                   <Text paddingHorizontal={10}>{item.name || "Hee"}</Text>
+                  <Text paddingHorizontal={10}>{item.Score || "00"}</Text>
                 </View>
               </Box>
             </Pressable>

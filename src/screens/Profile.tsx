@@ -82,19 +82,19 @@ export default function Profile() {
       //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       // }
       renderItem={({ item }) => (
-        <Pressable flex={0.5}>
-          <Box bg="#F0F4EF" p="$5" margin={5} borderRadius={13}>
-            <Image
-              style={{
-                width: "100%",
-                height: undefined,
-                aspectRatio: 1,
-                resizeMode: "contain",
-              }}
-              source={{ uri: item?.image }}
-              alt={"---"}
-            />
-          </Box>
+        <Pressable style={{ flex: 1 / 3 }}>
+          <Image
+            style={{
+              marginVertical:10,
+              marginHorizontal:5,
+              width: 120,
+              height: 120,
+              aspectRatio: 1,
+              resizeMode: "cover",
+            }}
+            source={{ uri: item?.image }}
+            alt={"---"}
+          />
         </Pressable>
       )}
       keyExtractor={(item) => item.id}

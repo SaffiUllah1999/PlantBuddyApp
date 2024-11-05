@@ -140,24 +140,29 @@ export default function Articles() {
         </ScrollView>
       </View>
 
+      <Text paddingVertical={20} paddingHorizontal={20}>Trending</Text>
+
       <View
         style={{
-          height: "40%",
+          height: "100%",
           marginVertical: 20,
-          paddingHorizontal: 10,
+          justifyContent:"center",
+          alignContent:'center',
+          alignItems:'center'
+          
         }}
       >
-        <Text paddingVertical={20}>Trending</Text>
+  
         <FlatList
           data={dataset?.articles}
           style={{ paddingHorizontal: 10 , }}
-          horizontal={true}
+  
           // refreshControl={
           //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           // }
           renderItem={({ item }) => (
             <>
-              <Pressable style={{ width: 300, paddingHorizontal: 10 }} onPress={()=> navigation.navigate("ArticleDetail",{
+              <Pressable style={{ width: "100%", paddingHorizontal: 10 }} onPress={()=> navigation.navigate("ArticleDetail",{
                 data: item
               })}>
                 <Image
