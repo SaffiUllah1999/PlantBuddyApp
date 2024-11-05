@@ -35,6 +35,7 @@ export default function Carefull() {
     <Text bold size={"xl"}>
       Careful
     </Text>
+
     <View
       style={{
         borderRadius: 20,
@@ -65,7 +66,7 @@ export default function Carefull() {
               }}
             >
               <Text bold color={"#fff"}>
-                1
+                
               </Text>
             </View>
           </Pressable>
@@ -77,7 +78,7 @@ export default function Carefull() {
             justifyContent: "center",
           }}
         >
-          <Text color="#fff"> 312312321</Text>
+          <Text color="#fff"> Watering Amount</Text>
         </View>
       </View>
       <View
@@ -116,11 +117,11 @@ export default function Carefull() {
             justifyContent: "center",
           }}
         >
-          <Text color="#fff"> 312312321</Text>
+          <Text color="#fff"> Watering Schedule</Text>
         </View>
       </View>
     </View>
-
+{/* 
     <View
       style={{
         borderRadius: 20,
@@ -291,7 +292,7 @@ export default function Carefull() {
           <Text color="#fff"> 312312321</Text>
         </View>
       </View>
-    </View>
+    </View> */}
   </View>
   )
 }

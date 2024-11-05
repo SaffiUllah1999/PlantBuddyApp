@@ -394,7 +394,7 @@ export default function Details({ route }) {
               isDisabled={false}
               isFocusVisible={false}
               borderRadius={20}
-              onPress={()=> PlaceOrder()}
+              onPress={() => PlaceOrder()}
             >
               <ButtonText>Buy Now </ButtonText>
             </Button>
@@ -475,11 +475,11 @@ export default function Details({ route }) {
             </Pressable>
           </ScrollView>
           {current === 1 ? (
-            <Carefull />
+            <Carefull/>
           ) : current === 2 ? (
-            <Place />
+            <Place/>
           ) : (
-            <Characteristic />
+            <Characteristic/>
           )}
         </View>
       </ScrollView>

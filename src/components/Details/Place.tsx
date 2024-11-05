@@ -44,7 +44,7 @@ export default function Place() {
       }}
     >
       <Text color="#fff" style={{ paddingVertical: 10 }}>
-        Careful
+        Careful About
       </Text>
       <View
         style={{
@@ -65,7 +65,7 @@ export default function Place() {
               }}
             >
               <Text bold color={"#fff"}>
-                1
+                
               </Text>
             </View>
           </Pressable>
@@ -77,7 +77,7 @@ export default function Place() {
             justifyContent: "center",
           }}
         >
-          <Text color="#fff"> 312312321</Text>
+          <Text color="#fff">Room Temperate and Sunlight</Text>
         </View>
       </View>
       <View
@@ -116,182 +116,11 @@ export default function Place() {
             justifyContent: "center",
           }}
         >
-          <Text color="#fff"> 312312321</Text>
+          <Text color="#fff">Avoid From</Text>
         </View>
       </View>
     </View>
 
-    <View
-      style={{
-        borderRadius: 20,
-        padding: 20,
-        marginTop: 10,
-        backgroundColor: "#036247",
-      }}
-    >
-      <Text color="#fff" style={{ paddingVertical: 10 }}>
-        Careful
-      </Text>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <View style={{ width: "20%", alignItems: "flex-start" }}>
-          <Pressable onPress={() => {}}>
-            <View
-              style={{
-                backgroundColor: "#0ACF83",
-                borderRadius: 1000,
-                width: 40,
-                height: 40,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text bold color={"#fff"}>
-                1
-              </Text>
-            </View>
-          </Pressable>
-        </View>
-        <View
-          style={{
-            width: "80%",
-            alignItems: "flex-start",
-            justifyContent: "center",
-          }}
-        >
-          <Text color="#fff"> 312312321</Text>
-        </View>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginTop: 10,
-        }}
-      >
-        <View style={{ width: "20%", alignItems: "flex-start" }}>
-          <Pressable onPress={() => {}}>
-            <View
-              style={{
-                backgroundColor: "#0ACF83",
-                borderRadius: 1000,
-                width: 40,
-                height: 40,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Icon
-                borderColor="#fff"
-            
-                fill={"#fff"}
-                as={Droplet}
-                size="md"
-              />
-            </View>
-          </Pressable>
-        </View>
-        <View
-          style={{
-            width: "80%",
-            alignItems: "flex-start",
-            justifyContent: "center",
-          }}
-        >
-          <Text color="#fff"> 312312321</Text>
-        </View>
-      </View>
-    </View>
-
-    <View
-      style={{
-        borderRadius: 20,
-        padding: 20,
-        marginTop: 10,
-        backgroundColor: "#036247",
-      }}
-    >
-      <Text color="#fff" style={{ paddingVertical: 10 }}>
-        Careful
-      </Text>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <View style={{ width: "20%", alignItems: "flex-start" }}>
-          <Pressable onPress={() => {}}>
-            <View
-              style={{
-                backgroundColor: "#0ACF83",
-                borderRadius: 1000,
-                width: 40,
-                height: 40,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text bold color={"#fff"}>
-                1
-              </Text>
-            </View>
-          </Pressable>
-        </View>
-        <View
-          style={{
-            width: "80%",
-            alignItems: "flex-start",
-            justifyContent: "center",
-          }}
-        >
-          <Text color="#fff"> 312312321</Text>
-        </View>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginTop: 10,
-        }}
-      >
-        <View style={{ width: "20%", alignItems: "flex-start" }}>
-          <Pressable onPress={() => {}}>
-            <View
-              style={{
-                backgroundColor: "#0ACF83",
-                borderRadius: 1000,
-                width: 40,
-                height: 40,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Icon
-                borderColor="#fff"
-            
-                fill={"#fff"}
-                as={Droplet}
-                size="md"
-              />
-            </View>
-          </Pressable>
-        </View>
-        <View
-          style={{
-            width: "80%",
-            alignItems: "flex-start",
-            justifyContent: "center",
-          }}
-        >
-          <Text color="#fff"> 312312321</Text>
-        </View>
-      </View>
-    </View>
   </View>
   )
 }
