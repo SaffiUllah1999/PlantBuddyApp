@@ -21,7 +21,7 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { Box } from "@gluestack-ui/themed";
 
 
-export default function Place() {
+export default function Place(props) {
   return (
     <View
     style={{
@@ -77,7 +77,7 @@ export default function Place() {
             justifyContent: "center",
           }}
         >
-          <Text color="#fff">Room Temperate and Sunlight</Text>
+          <Text color="#fff"> {props?.data?.place1Data ? props?.data?.place1Data : "Room Temperate and Sunlight"}</Text>
         </View>
       </View>
       <View
@@ -116,7 +116,7 @@ export default function Place() {
             justifyContent: "center",
           }}
         >
-          <Text color="#fff">Avoid From</Text>
+          <Text color="#fff"> {props?.data?.place2Data ? props?.data?.place2Data : "Avoid From"}</Text>
         </View>
       </View>
     </View>

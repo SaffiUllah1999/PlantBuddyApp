@@ -258,6 +258,7 @@ export default function Details({ route }) {
         name: route?.params?.data?.name,
         price: route?.params?.data?.price,
         quantity: parseInt(quantity),
+        status: "complete",
       },
     ];
 
@@ -475,12 +476,32 @@ export default function Details({ route }) {
             </Pressable>
           </ScrollView>
           {current === 1 ? (
-            <Carefull/>
+            <Carefull data={route?.params?.data} />
           ) : current === 2 ? (
-            <Place/>
+            <Place data={route?.params?.data} />
           ) : (
-            <Characteristic/>
+            <Characteristic data={route?.params?.data} />
           )}
+
+          <View
+            style={{
+              flex: 1,
+              paddingBottom: 20,
+              backgroundColor: "#fff",
+              marginHorizontal: 20,
+              marginTop: 10,
+            }}
+          >
+            <Text bold size={"xl"} paddingVertical={10}>Reviews</Text>
+            {route?.params?.data?.review?.map((c) => {
+              return (
+                <View style={{padding:10, backgroundColor:"#036247", color:"#036247", borderRadius:15}}>
+                  <Text color="#fff">{c?.comment}</Text>
+                  <Text color="#fff">By: {c?.email}</Text>
+                </View>
+              );
+            })}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

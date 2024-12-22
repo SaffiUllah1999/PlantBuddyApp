@@ -20,7 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { Box } from "@gluestack-ui/themed";
 
-export default function Characteristic() {
+export default function Characteristic(props) {
   return (
     <View
       style={{
@@ -76,7 +76,7 @@ export default function Characteristic() {
               justifyContent: "center",
             }}
           >
-            <Text color="#fff">Toxicty Level</Text>
+            <Text color="#fff"> {props?.data?.char1Data ? props?.data?.char1Data : "Toxicty Level"}</Text>
           </View>
         </View>
         <View
@@ -109,7 +109,7 @@ export default function Characteristic() {
               justifyContent: "center",
             }}
           >
-            <Text color="#fff"> Category</Text>
+            <Text color="#fff"> {props?.data?.char2Data ? props?.data?.char2Data : "Category"}</Text>
           </View>
         </View>
       </View>

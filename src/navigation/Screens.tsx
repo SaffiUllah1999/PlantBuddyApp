@@ -10,6 +10,7 @@ import Details from "../screens/Details";
 import Cart from "../screens/Cart";
 import Article_Details from "../screens/Article_Details";
 import Browse from "../screens/Browse";
+import Order from "../screens/Order";
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ export default function Screens() {
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="ArticleDetail" component={Article_Details} />
         <Stack.Screen name="Browse" component={Browse} />
+        <Stack.Screen name="Order" component={Order} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -71,6 +71,7 @@ export default function Cart() {
       name: item?.data?.name,
       price: item?.data?.price,
       quantity: item?.quantity,
+      status : "complete"
     }));
 
     commonDataService

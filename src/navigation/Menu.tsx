@@ -6,6 +6,7 @@ import BottomNav from "./BottomNav";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import Leaderboard from "../screens/Leaderboard";
+import Order from "../screens/Order";
 
 function HomeScreen({ navigation }) {
   return (
@@ -32,7 +33,7 @@ export default function Menu() {
   return (
     <Drawer.Navigator initialRouteName="Home"  screenOptions={{ headerShown: false }}>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Notifications" component={NotificationsScreen} />
+      <Drawer.Screen name="My Orders" component={Order} />
       <Drawer.Screen name="Leaderboard" component={Leaderboard} />
     </Drawer.Navigator>
   );

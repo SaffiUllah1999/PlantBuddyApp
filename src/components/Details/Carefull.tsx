@@ -21,7 +21,7 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { Box } from "@gluestack-ui/themed";
 
 
-export default function Carefull() {
+export default function Carefull(props) {
   return (
     <View
     style={{
@@ -78,7 +78,7 @@ export default function Carefull() {
             justifyContent: "center",
           }}
         >
-          <Text color="#fff"> Watering Amount</Text>
+          <Text color="#fff">{props?.data?.care1Data ? props?.data?.care1Data :  "Watering Amount"}</Text>
         </View>
       </View>
       <View
@@ -117,7 +117,7 @@ export default function Carefull() {
             justifyContent: "center",
           }}
         >
-          <Text color="#fff"> Watering Schedule</Text>
+          <Text color="#fff"> {props?.data?.care2Data ? props?.data?.care2Data :  "Watering Schedule"}</Text>
         </View>
       </View>
     </View>
