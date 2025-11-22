@@ -29,7 +29,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-export const REACT_APP_API_URL = "http://192.168.1.122:3000"; // FDP Local
+export const REACT_APP_API_URL = "https://plantbuddy.innovorix.com"; // FDP Local
 export default class CommonDataService {
   executeApiCall(path, data) {
     console.log(`${REACT_APP_API_URL}${path}` + JSON.stringify(data));

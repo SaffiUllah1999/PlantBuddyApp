@@ -1,12 +1,13 @@
 import { StyleSheet, View, useWindowDimensions } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Image } from "@gluestack-ui/themed";
+import { ActionsheetContent, ActionsheetDragIndicator, ActionsheetDragIndicatorWrapper, ActionsheetItem, Image, InputField, ModalBody } from "@gluestack-ui/themed";
 import { Icon, CalendarDaysIcon } from "@gluestack-ui/themed";
 import {
   ChevronLeftIcon,
   CircleMinus,
   CirclePlus,
   Droplet,
+  Heading,
   Heart,
   Navigation,
   Plus,
@@ -33,6 +34,18 @@ import Loading from "../components/Loading";
 import { FlatList } from "react-native";
 import { Avatar } from "@gluestack-ui/themed";
 import { AvatarFallbackText } from "@gluestack-ui/themed";
+import { Ionicons } from "@expo/vector-icons";
+import { Actionsheet } from "@gluestack-ui/themed";
+import { ActionsheetBackdrop } from "@gluestack-ui/themed";
+import { ActionsheetItemText } from "@gluestack-ui/themed";
+import { Modal } from "@gluestack-ui/themed";
+import { ModalBackdrop } from "@gluestack-ui/themed";
+import { ModalContent } from "@gluestack-ui/themed";
+import { ModalHeader } from "@gluestack-ui/themed";
+import { ModalCloseButton } from "@gluestack-ui/themed";
+import { CloseIcon } from "@gluestack-ui/themed";
+import { ModalFooter } from "@gluestack-ui/themed";
+import { Input } from "@gluestack-ui/themed";
 
 export default function Browse({ route }) {
   const navigation = useNavigation();
@@ -40,8 +53,11 @@ export default function Browse({ route }) {
   const [current, setCurrent] = useState(1);
   const { userData, setUserData } = useData();
   const [loading, setloading] = useState(true);
+  const [showActionsheet, setshowActionsheet] = useState(false)
+  const [postData, setPostData] = useState('')
 
   const [dataset, setDataset] = useState();
+  const [showModal, setShowModal] = useState(false)
 
   const [image, setImage] = useState(null);
   const [base64String, setBase64String] = useState("");
@@ -52,15 +68,91 @@ export default function Browse({ route }) {
     Get_Feed();
   }, []);
 
+  //imageId, userEmail
+
+  const handle_Like = (c, image) => {
+    console.log(image);
+    let dataset = {
+      userEmail: c?.email,
+      imageId: image,
+    };
+
+    commonDataService
+      .executeApiCall(SERVICE_ROUTE.LIKE, dataset)
+      .then((res) => {
+        console.log("Resend :" + JSON.stringify(res));
+        Get_Feed();
+        // setUserData((c) => ({ ...c, email: dataset?.email }));
+        // setloading(false);
+      })
+      .catch(function (error) {
+        if (error) {
+          console.log(error)
+          setloading(false);
+          // console.log(JSON.stringify(error?.response?.data));
+          // Alert.alert(
+          //   "Error", // Title of the alert
+          //   error?.response?.data, // Message of the alert
+          //   [{ text: "OK" }] // Buttons array, with an OK button
+          // );
+        }
+      });
+  };
+  //email, name, text 
+  const handleContinuePost = (c) => {
+    console.log(image);
+    let dataset = {
+      email: c?.email,
+      name: c?.name,
+      text: postData
+    };
+
+    setloading(true)
+
+    commonDataService
+      .executeApiCall(SERVICE_ROUTE.POSTTEXT, dataset)
+      .then((res) => {
+        console.log("Resend :" + JSON.stringify(res));
+
+        setShowModal(false)
+        Alert.alert(
+          "Alert", // Title of the alert
+          res?.data?.message, // Message of the alert
+          [{ text: "OK" }] // Buttons array, with an OK button
+        );
+        setloading(false)
+        Get_Feed();
+        // setUserData((c) => ({ ...c, email: dataset?.email }));
+        // setloading(false);
+      })
+      .catch(function (error) {
+        if (error) {
+          console.log(error)
+          setloading(false);
+          // console.log(JSON.stringify(error?.response?.data));
+          // Alert.alert(
+          //   "Error", // Title of the alert
+          //   error?.response?.data, // Message of the alert
+          //   [{ text: "OK" }] // Buttons array, with an OK button
+          // );
+        }
+      });
+  };
+
+
+  const handleCLose = () => {
+    setshowActionsheet(false)
+  }
+
   const Get_Feed = () => {
-   
+
     let dataset = {
       email: userData?.email,
     };
 
     console.log(dataset);
     commonDataService
-      .fetchData_3(SERVICE_ROUTE.GET_FEED,dataset)
+      .fetchData_3(SERVICE_ROUTE.GET_FEED, dataset)
       .then((res) => {
         setDataset(res?.data);
         setloading(false);
@@ -75,7 +167,7 @@ export default function Browse({ route }) {
     console.log("entered");
     let dataset = {
       email: c?.email,
-      name : c?.name,
+      name: c?.name,
       image: image,
     };
 
@@ -136,6 +228,72 @@ export default function Browse({ route }) {
     <Loading />
   ) : (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4EF" }}>
+
+      <Modal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+        }}
+        size="md"
+      >
+        <ModalBackdrop />
+        <ModalContent>
+          <ModalHeader>
+            <Text>Post</Text>
+            <ModalCloseButton>
+              <Icon as={CloseIcon} />
+            </ModalCloseButton>
+          </ModalHeader>
+          <ModalBody>
+            <Text>Enter The Details to share</Text>
+            <Input
+              borderRadius={10}
+              minHeight={45}
+              variant="outline"
+              size="md"
+              isDisabled={false}
+              isInvalid={false}
+              isReadOnly={false}
+            >
+              <InputField
+                placeholder="Enter Data to share"
+                onChangeText={(c) => setPostData(c)}
+              />
+            </Input>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              marginVertical={"5%"}
+              borderRadius={20}
+              width={"100%"}
+              size="xl"
+              bgColor="#004643"
+              variant="solid"
+              action="primary"
+              isDisabled={false}
+              isFocusVisible={false}
+              onPress={() =>
+                postData
+                  ? handleContinuePost(userData)
+                  : Alert.alert(
+                    "Error",
+                    "Please enter the data first",
+                    [
+                      {
+                        text: "OK",
+                        onPress: () => console.log("OK Pressed"),
+                      },
+                    ]
+                  )
+              }
+            >
+              <ButtonText>Upload</ButtonText>
+            </Button>
+
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <View style={{ flexDirection: "row", height: "10%" }}>
         <View style={{ width: "35%", justifyContent: "center" }}>
           <Pressable
@@ -155,6 +313,21 @@ export default function Browse({ route }) {
           <Text bold>Feed </Text>
         </View>
       </View>
+      <Actionsheet isOpen={showActionsheet} onClose={handleCLose}>
+        <ActionsheetBackdrop />
+        <ActionsheetContent>
+          <ActionsheetDragIndicatorWrapper>
+            <ActionsheetDragIndicator />
+          </ActionsheetDragIndicatorWrapper>
+          <ActionsheetItem onPress={() => (setshowActionsheet(false), pickImage())}>
+            <ActionsheetItemText>Upload Image</ActionsheetItemText>
+          </ActionsheetItem>
+          <ActionsheetItem onPress={() => (setshowActionsheet(false), setShowModal(true))}>
+            <ActionsheetItemText>Upload text</ActionsheetItemText>
+          </ActionsheetItem>
+
+        </ActionsheetContent>
+      </Actionsheet>
       <View style={{ flexDirection: "row", height: "80%" }}>
         <FlatList
           data={dataset}
@@ -164,11 +337,11 @@ export default function Browse({ route }) {
           // }
           renderItem={({ item }) => (
             <Pressable flex={1}>
-              <View style={{ width: "100%", margin:5, alignItems: "flex-start" , flexDirection:"row" }}>
+              <View style={{ width: "100%", margin: 5, alignItems: "flex-start", flexDirection: "row" }}>
                 <Avatar bgColor="$amber600" size="sm" borderRadius="$full">
                   <AvatarFallbackText>Avatar</AvatarFallbackText>
                 </Avatar>
-                <Text style={{marginLeft:10}}>{item?.name}</Text>
+                <Text style={{ marginLeft: 10 }}>{item?.name}</Text>
               </View>
               <Box bg="#fff" p="$5" margin={5} borderRadius={13}>
                 <View style={{ flexDirection: "row" }}></View>
@@ -183,6 +356,18 @@ export default function Browse({ route }) {
                   source={{ uri: item?.image }}
                   alt={"---"}
                 />
+                <View style={{ flexDirection: "row" }}>
+                  <Pressable onPress={() => handle_Like(userData, item?._id)} style={{ flexDirection: "row" }}>
+                    <Ionicons
+                      name={item?.likes.includes(userData?.email) ? "heart" : "heart-outline"}
+                      size={25}
+                      color={item?.likes.includes(userData.email) ? "red" : "#000"}
+                    />
+                    <Text>{item?.likesCount}</Text>
+                  </Pressable>
+                  <Ionicons name="chatbubble-ellipses-outline" size={25} color={"#000"} style={{ marginLeft: 10 }} />
+                </View>
+
               </Box>
             </Pressable>
           )}
@@ -208,7 +393,7 @@ export default function Browse({ route }) {
                 borderRadius: 500,
               }}
             >
-              <Pressable onPress={() => pickImage()}>
+              <Pressable onPress={() => setshowActionsheet(true)}>
                 <Icon as={Plus} size="xl" color="#fff" />
               </Pressable>
             </View>

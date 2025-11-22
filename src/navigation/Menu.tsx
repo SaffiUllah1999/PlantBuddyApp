@@ -1,40 +1,93 @@
-import * as React from "react";
-import { Button, View } from "react-native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer } from "@react-navigation/native";
-import BottomNav from "./BottomNav";
+import React from "react";
+import { View, Image, StyleSheet } from "react-native";
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+
 import Home from "../screens/Home";
-import Profile from "../screens/Profile";
-import Leaderboard from "../screens/Leaderboard";
 import Order from "../screens/Order";
-
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button
-        onPress={() => navigation.navigate("Notifications")}
-        title="Go to notifications"
-      />
-    </View>
-  );
-}
-
-function NotificationsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
-}
+import Leaderboard from "../screens/Leaderboard";
 
 const Drawer = createDrawerNavigator();
+ 
 
-export default function Menu() {
+// ---------------- CUSTOM DRAWER CONTENT ----------------
+function CustomDrawerContent(props) {
+  const { state, navigation } = props;
+
   return (
-    <Drawer.Navigator initialRouteName="Home"  screenOptions={{ headerShown: false }}>
+    <DrawerContentScrollView
+      {...props}
+      contentContainerStyle={{ paddingTop: 0 }}
+    >
+      {/* 🔵 Top Image */}
+      <View style={styles.header}>
+        <Image
+          source={require("../assets/logo.png")}   // Change to your image
+          style={styles.logo}
+          resizeMode="contain"
+        />
+      </View>
+
+      {/* 🔵 Drawer Items */}
+      {state.routeNames.map((route, index) => {
+        const isActive = state.index === index;
+
+        return (
+          <DrawerItem
+            key={route}
+            label={route}
+            onPress={() => navigation.navigate(route)}
+            labelStyle={{
+              color: isActive ? "#fff" : "#888",
+              fontSize: 16,
+            }}
+            style={{
+              backgroundColor: isActive ? "#1a1a1a" : "transparent",
+              borderRadius: 10,
+              marginHorizontal: 10,
+              marginVertical: 4,
+            }}
+          />
+        );
+      })}
+    </DrawerContentScrollView>
+  );
+}
+
+// ---------------- MAIN DRAWER NAVIGATOR ----------------
+export default function AppDrawer() {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        headerShown: false,
+        swipeEnabled: false,
+      }}
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      drawerType="slide"
+      overlayColor="transparent"
+      sceneContainerStyle={{ backgroundColor: "#000" }}
+      drawerStyle={{
+        flex: 1,
+        width: "60%",
+        backgroundColor: "transparent",
+        borderRightWidth: 0,
+      }}
+    >
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="My Orders" component={Order} />
       <Drawer.Screen name="Leaderboard" component={Leaderboard} />
     </Drawer.Navigator>
   );
 }
+
+// ---------------- STYLES ----------------
+const styles = StyleSheet.create({
+  header: {
+    width: "100%",
+    alignItems: "center",
+    paddingVertical: 40,
+  },
+  logo: {
+    width: 120,
+    height: 120,
+  },
+});

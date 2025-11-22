@@ -174,7 +174,7 @@ export default function Cart() {
                     <Image
                       style={{ aspectRatio: 4, resizeMode: "contain" }}
                       source={{
-                        uri: `data:image/png;base64,${item?.data?.image}`,
+                        uri: item?.data?.image,
                       }}
                       alt={"---"}
                     />

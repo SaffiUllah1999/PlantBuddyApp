@@ -21,6 +21,7 @@ import {
   ShoppingCart,
   Grid2X2,
   UserSquare,
+  ChevronLeft,
 } from "lucide-react-native";
 import { Input } from "@gluestack-ui/themed";
 import { InputField } from "@gluestack-ui/themed";
@@ -85,8 +86,8 @@ export default function Profile() {
         <Pressable style={{ flex: 1 / 3 }}>
           <Image
             style={{
-              marginVertical:10,
-              marginHorizontal:5,
+              marginVertical: 10,
+              marginHorizontal: 5,
               width: 120,
               height: 120,
               aspectRatio: 1,
@@ -143,7 +144,7 @@ export default function Profile() {
       >
         <View style={{ height: "30%" }}>
           <ImageBackground
-            source={require("./../assets/images/profileCover.png")}
+            source={require("./../assets/green_Pattern.jpg")}
             resizeMode="stretch"
             alt="ImageBackground"
             style={{ height: "100%" }}
@@ -157,8 +158,19 @@ export default function Profile() {
                   paddingHorizontal: 10,
                 }}
               >
+                 <View style={{ width: "5%", paddingVertical: 20 }}>
+                 <Icon
+                    borderColor="#000"
+                    fill={"#000"}
+                    as={ChevronLeft}
+                    size="md"
+                  />
+                 </View>
                 <View style={{ width: "90%", paddingVertical: 20 }}>
-                  <Text color={"#fff"}>Profile</Text>
+                 
+                  <Text color={"#000"} bold>
+                    Profile
+                  </Text>
                 </View>
                 <View style={{ width: "10%" }}></View>
               </View>
@@ -180,7 +192,7 @@ export default function Profile() {
               <View
                 style={{ paddingHorizontal: 10, justifyContent: "flex-end" }}
               >
-                <Text bold color={"white"}>
+                <Text bold color={"black"}>
                   {userData?.name}
                 </Text>
                 {/* <Button bg={"white"}>
@@ -192,38 +204,44 @@ export default function Profile() {
             <View
               style={{
                 flexDirection: "row",
-                height: "10%",
+                height: "11%",
                 justifyContent: "space-evenly",
-                borderWidth: 1,
-                backgroundColor: "#000",
+                alignItems: "center",
+                backgroundColor: "#008000",
               }}
             >
               <View>
-                <Text color={"white"}>posts</Text>
+                <Text color={"white"} bold>
+                  posts
+                </Text>
               </View>
               <View>
-                <Text color={"white"}>followers</Text>
+                <Text color={"white"} bold>
+                  followers
+                </Text>
               </View>
               <View>
-                <Text color={"white"}>following</Text>
+                <Text color={"white"} bold>
+                  following
+                </Text>
               </View>
             </View>
             <View
               style={{
                 flexDirection: "row",
-                height: "10%",
+                height: "8%",
                 justifyContent: "space-evenly",
                 backgroundColor: "rbga(0,0,0,1)",
               }}
             >
               <View>
-                <Text color={"white"}>1</Text>
+                <Text color={"black"}>1</Text>
               </View>
               <View>
-                <Text color={"white"}>50</Text>
+                <Text color={"black"}>50</Text>
               </View>
               <View>
-                <Text color={"white"}>100</Text>
+                <Text color={"black"}>100</Text>
               </View>
             </View>
           </ImageBackground>

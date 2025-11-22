@@ -32,7 +32,7 @@ export default function Login() {
   const navigation = useNavigation();
   const [dataset, setDataset] = useState({ tutorial: "" });
   const commonDataService = new CommonDataService();
-  const [loading,setloading]=useState(false)
+  const [loading, setloading] = useState(false)
 
   const retrieveData = async () => {
     try {
@@ -58,7 +58,7 @@ export default function Login() {
       .executeApiCall(SERVICE_ROUTE.LOGIN, data_set)
       .then((res) => {
         console.log("Resend :" + JSON.stringify(res));
-        setUserData((c) => ({...c, email:data_set?.email , name : res?.data?.name }));
+        setUserData((c) => ({ ...c, email: data_set?.email, name: res?.data?.name }));
         setloading(false)
         dataset?.tutorial
           ? navigation.navigate("Home")
@@ -98,9 +98,9 @@ export default function Login() {
     // Register_Call(values);
   };
 
-  return loading ? <Loading/> : (
+  return loading ? <Loading /> : (
     <View>
-      <View style={{ alignItems: "center", marginHorizontal: "4%" }}>
+      <View style={{ alignItems: "center", }}>
         <Image
           size="xl"
           source={require("../assets/logo.png")}
@@ -109,8 +109,9 @@ export default function Login() {
         />
 
         <Text size={"xl"} style={{ color: "#004643" }}>
-          Sign in to your account
+          Welcome Back – Log In
         </Text>
+
         <Formik
           enableReinitialize={true}
           initialValues={{
@@ -130,107 +131,112 @@ export default function Login() {
             setFieldValue,
           }) => (
             <View
-              style={{ alignItems: "flex-start", marginTop: 10, width: "96%" }}
+              style={{ alignItems: "flex-start", marginTop: 10, width: "100%" }}
             >
-              <Text style={{ marginVertical: "4%" }}>Email Address</Text>
-              <Input
-                borderRadius={10}
-                minHeight={45}
-                variant="outline"
-                size="md"
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}
-              >
-                <InputField
-                  placeholder="Enter your email address"
-                  onChangeText={handleChange("email")}
-                />
-              </Input>
+              <View style={{ backgroundColor: "rgba(2, 92, 28, 0.089)", width: "95%", marginHorizontal: 10, borderRadius: 20 }}>
+                <View style={{ marginHorizontal: 20 }}>
+                  <Text style={{ marginVertical: "4%" }}>Email Address</Text>
+                  <Input
+                    borderRadius={10}
+                    minHeight={45}
+                    variant="outline"
+                    size="md"
+                    isDisabled={false}
+                    isInvalid={false}
+                    isReadOnly={false}
+                  >
+                    <InputField
+                      placeholder="Enter your email address"
+                      onChangeText={handleChange("email")}
+                    />
+                  </Input>
 
-              {touched.email && errors.email && (
-                <Text color={"$red400"}>Please valid email address</Text>
-              )}
+                  {touched.email && errors.email && (
+                    <Text color={"$red400"}>Please valid email address</Text>
+                  )}
 
-              <Text style={{ marginVertical: "4%" }}>Password</Text>
+                  <Text style={{ marginVertical: "4%" }}>Password</Text>
 
-              <Input
-                borderRadius={10}
-                variant="outline"
-                size="md"
-                minHeight={45}
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}
-              >
-                <InputField
-                  placeholder="Enter your password"
-                  type="password"
-                  onChangeText={handleChange("password")}
-                />
-              </Input>
+                  <Input
+                    borderRadius={10}
+                    variant="outline"
+                    size="md"
+                    minHeight={45}
+                    isDisabled={false}
+                    isInvalid={false}
+                    isReadOnly={false}
+                  >
+                    <InputField
+                      placeholder="Enter your password"
+                      type="password"
+                      onChangeText={handleChange("password")}
+                    />
+                  </Input>
 
-              {touched.password && errors.password && (
-                <Text color={"$red400"}>Please enter password</Text>
-              )}
+                  {touched.password && errors.password && (
+                    <Text color={"$red400"}>Please enter password</Text>
+                  )}
 
-              <Text
-                style={{ marginVertical: "4%", width: "100%" }}
-                textAlign="right"
-              >
-                Forgot Password ?
-              </Text>
+                  <Text
+                    style={{ marginVertical: "4%", width: "100%" }}
+                    textAlign="right"
+                  >
+                    Forgot Password ?
+                  </Text>
 
-              <Checkbox
-                size="md"
-                isInvalid={false}
-                isDisabled={false}
-                value="true"
-                style={{ marginVertical: "7%" }}
-                onChange={(c) => setFieldValue("checked", c)}
-              >
-                <CheckboxIndicator mr="$2">
-                  <CheckboxIcon
-                    as={CheckIcon}
-                    color="$white"
-                    bgColor="$green800"
-                    borderColor="$green800"
-                    $active-borderColor="$green800"
-                  />
-                </CheckboxIndicator>
-                <CheckboxLabel style={{ marginHorizontal: "5%" }}>
-                  I’ve read and agreed to User Agreement and Privacy Policy
-                </CheckboxLabel>
-              </Checkbox>
+                  <Checkbox
+                    size="md"
+                    isInvalid={false}
+                    isDisabled={false}
+                    value="true"
+                    style={{ marginVertical: "7%" }}
+                    onChange={(c) => setFieldValue("checked", c)}
+                  >
+                    <CheckboxIndicator mr="$2">
+                      <CheckboxIcon
+                        as={CheckIcon}
+                        color="$white"
+                        bgColor="$green800"
+                        borderColor="$green800"
+                        $active-borderColor="$green800"
+                      />
+                    </CheckboxIndicator>
+                    <CheckboxLabel style={{ marginHorizontal: "5%" }}>
+                      I’ve read and agreed to User Agreement and Privacy Policy
+                    </CheckboxLabel>
+                  </Checkbox>
 
-              <Button
-                marginVertical={"5%"}
-                borderRadius={20}
-                width={"100%"}
-                size="xl"
-                bgColor="#004643"
-                variant="solid"
-                action="primary"
-                isDisabled={false}
-                isFocusVisible={false}
-                onPress={() =>
-                  values.checked
-                    ? handleSubmit()
-                    : Alert.alert(
-                        "Error",
-                        "Please accept terms & conditions !",
-                        [
-                          {
-                            text: "OK",
-                            onPress: () => console.log("OK Pressed"),
-                          },
-                        ]
-                      )
-                }
-              >
-                <ButtonText>Sign In </ButtonText>
-              </Button>
+                  <Button
+                    marginVertical={"5%"}
+                    borderRadius={20}
+                    width={"100%"}
+                    size="xl"
+                    bgColor="#004643"
+                    variant="solid"
+                    action="primary"
+                    isDisabled={false}
+                    isFocusVisible={false}
+                    onPress={() =>
+                      values.checked
+                        ? handleSubmit()
+                        : Alert.alert(
+                          "Error",
+                          "Please accept terms & conditions !",
+                          [
+                            {
+                              text: "OK",
+                              onPress: () => console.log("OK Pressed"),
+                            },
+                          ]
+                        )
+                    }
+                  >
+                    <ButtonText>Sign In </ButtonText>
+                  </Button>
 
+                </View>
+
+              </View>
               <View
                 style={{
                   flexDirection: "row",
@@ -247,8 +253,8 @@ export default function Login() {
             </View>
           )}
         </Formik>
-      </View>
-    </View>
+      </View >
+    </View >
   );
 }
 

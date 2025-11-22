@@ -17,5 +17,9 @@ export const SERVICE_ROUTE = {
   USER_GET:"/getUsers",
   GET_LEADERBOARD_DATA:"/getLeaderBoardUsers",
   GET_ALL_ORDERS:"/getAllOrders",
-  SAVE_REVIEW:"/saveReviewToOrder"
+  SAVE_REVIEW:"/saveReviewToOrder",
+  LIKE:"/likeImage",
+  UNLIKE:"",
+  COMMENT:"/commentImage",
+  POSTTEXT:"/uploadtextpost"
 };

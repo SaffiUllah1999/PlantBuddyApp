@@ -55,7 +55,7 @@ export default function BottomNav() {
               <Icon
                 as={House}
                 size="lg"
-                fill={focused ? "#0ACF83" :"#fff"}
+                fill={focused ? "#rgba(71, 94, 62, 1)" :"#fff"}
                 // color={focused ? colors.primary : "white"}
               />
             </View>
@@ -80,7 +80,7 @@ export default function BottomNav() {
               <Icon
                 as={BookOpen}
                 size="lg"
-                fill={focused ? "#0ACF83" :"#fff"}
+                fill={focused ? "#rgba(71, 94, 62, 1)" :"#fff"}
                 // color={focused ? colors.primary : "white"}
               />
             </View>
@@ -98,18 +98,18 @@ export default function BottomNav() {
             <View
               style={{
                 borderWidth: 20,
-                borderColor: "white",
+                borderColor: "#rgba(71, 94, 62, 1)",
                 alignItems: "center",
                 borderRadius: 100,
-                backgroundColor: "white",
+                backgroundColor: "rgba(71, 94, 62, 1)",
                 marginBottom: 20,
-                marginTop: focused ? 0 : 12,
+                marginTop: focused ? 0 : -10,
               }}
             >
               <Icon
                 as={Camera}
                 size="lg"
-                // color={focused ? colors.primary : "white"}
+                color={"white"}
               />
               {focused ? (
                 <></>
@@ -119,11 +119,11 @@ export default function BottomNav() {
                     fontSize: 10,
                     color: "#fff",
                     textAlign: "center",
-                    lineHeight: 12,
-                    marginTop: 5,
+                    lineHeight: 0,
+                    marginTop: 0,
                   }}
                 >
-                  Home
+                  
                 </Text>
               )}
             </View>
@@ -148,7 +148,7 @@ export default function BottomNav() {
               <Icon
                 as={Globe}
                 size="lg"
-                fill={focused ? "#0ACF83" :"#fff"}
+                fill={focused ? "#rgba(71, 94, 62, 1)" :"#fff"}
                 // color={focused ? colors.primary : "white"}
               />
             </View>
@@ -173,7 +173,7 @@ export default function BottomNav() {
               <Icon
                 as={UserRound}
                 size="lg"
-                fill={focused ? "#0ACF83" :"#fff"}
+                fill={focused ? "#rgba(71, 94, 62, 1)" :"#fff"}
                 // color={focused ? colors.primary : "white"}
               />
             </View>
